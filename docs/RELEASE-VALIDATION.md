@@ -1,5 +1,20 @@
 # Public source release validation
 
+## Startup preparation update — 2026-09-20
+
+- All 79 existing Node tests pass; all 40 bundled asset checksums still match.
+- Production build passes with the expanded startup sequence.
+- A recording-renderer lifecycle check runs the actual `src/main.js` startup
+  with real scene constructors and delayed GPU-fence/readback substitutes.
+  It confirms scenery and both lip slots are submitted, underwater geometry is
+  drawn, pending readbacks complete, input unlocks only at readiness, and the
+  camera and opening simulation time are restored.
+- A failed-fence check confirms startup retains the loader and input lock.
+- The cloud browser cannot create WebGL in this environment. These checks do
+  not measure browser GPU frame timing or establish a zero-stutter guarantee.
+
+## Original 0.1.0 package
+
 Date: 2026-09-20. Source release: 0.1.0, based on ShoreBreak revision 23.
 
 | Check | Result |

@@ -72,8 +72,10 @@ Resolution boosts multiply each render dimension: 150% uses approximately
 limits. Boosts hold the selected resolution; return to 100% for Auto's adaptive
 resolution. These settings persist in local storage.
 
-The loader fetches local assets, compiles shaders, warms render passes, and
-settles the simulation before enabling controls. Loading time and frame rate
+The loader fetches local assets, compiles shaders, uploads off-camera scenery,
+rehearses moving shoreline and underwater views, and runs animated simulation
+and render frames before enabling controls. It then restores the opening wave
+time and waits for the final render buffers to settle. Loading time and frame rate
 depend on the browser, GPU, viewport, and selected settings. There is no fixed
 FPS or zero-stutter guarantee.
 

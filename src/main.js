@@ -47,6 +47,12 @@ document.body.classList.toggle('capture', CAPTURE);
 const walking = EXPLORE;
 const loading = window.__loading || (() => {});
 const breathe = () => new Promise(r => setTimeout(r, 0));
+const nextPaint = () => new Promise(r => requestAnimationFrame(r));
+window.__ready = false;
+// The loading overlay blocks pointer input; inert also blocks keyboard focus
+// and settings changes while their render targets are being prepared.
+const chrome = [...document.querySelectorAll('.chrome')];
+chrome.forEach(el => { el.inert = true; });
 loading('Shaping the seabed', 8);
 await breathe();
 if (EXPLORE) document.body.classList.add('explore');
@@ -182,9 +188,11 @@ function updateCamera(t) {
 
 // ------------------------------------------------------------------ render targets
 let W = 0, H = 0;
+let targetRevision = 0;
 let rtOpaque, rtBack, rtMain, rtParticles, post;
 const contactLight = new ContactLight();
 function makeTargets(w, h) {
+  targetRevision++;
   [rtOpaque, rtBack, rtMain, rtParticles].forEach((r) => r && r.dispose());
   const hdr = { type: THREE.HalfFloatType, minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, generateMipmaps: false };
   const msaa = 2;
@@ -263,7 +271,10 @@ function adaptResolution(dt) {
   if (Math.abs(next - dynScale) > 0.04) { dynScale = next; resize(); dyn.cooldown = 2; }
 }
 let resizeTimer;
-const queueResize = () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(resize, 120); };
+const queueResize = () => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => { resizeTimer = null; resize(); }, 120);
+};
 window.addEventListener('resize', queueResize);
 document.addEventListener('fullscreenchange', queueResize);
 new ResizeObserver(queueResize).observe(stage);
@@ -353,7 +364,7 @@ function exposureAt(t) {
 }
 
 // ------------------------------------------------------------------ frame
-function render() {
+function render(warmBothLips = false) {
   schedule.pack(simT);
   shared.uEvtA.value.set(schedule.A); shared.uEvtB.value.set(schedule.B); shared.uEvtC.value.set(schedule.C);
   shared.uEvtD.value.set(schedule.D); shared.uEvtE.value.set(schedule.E); shared.uEvtF.value.set(schedule.F); shared.uEvtG.value.set(schedule.G);
@@ -364,7 +375,10 @@ function render() {
   shared.uFocus.value.set(camera.position.x, camera.position.z);
   // assign lip ribbons to the events whose lip can be airborne now
   const slots = schedule.jetSlots(simT, camera.position.x);
-  lips.forEach((l, i) => { l.visible = i < slots.length && !DEBUG_HIDE.has('lip'); if (i < slots.length) l.slot = slots[i]; });
+  lips.forEach((l, i) => {
+    l.visible = (i < slots.length || (warmBothLips && schedule.count > 0)) && !DEBUG_HIDE.has('lip');
+    if (l.mesh.visible) l.slot = slots[i] ?? Math.min(i, schedule.count - 1);
+  });
 
   renderer.setClearColor(0x000000, 1);
   // 1) opaque: sky + beach/seabed
@@ -612,7 +626,7 @@ async function precompile() {
 // command-queue growth during warmup, so the loader remains responsive on slow GPUs.
 async function drainGPU() {
   const fence = gl.fenceSync(gl.SYNC_GPU_COMMANDS_COMPLETE, 0);
-  if (!fence) return;
+  if (!fence) throw new Error('Graphics initialization interrupted');
   gl.flush();
   try {
     while (true) {
@@ -622,6 +636,63 @@ async function drainGPU() {
       await new Promise(r => setTimeout(r, 8));
     }
   } finally { gl.deleteSync(fence); }
+}
+async function warmViews() {
+  // Compilation alone does not upload vertex/index buffers or create every
+  // VAO. Draw the complete opaque scene once, including off-camera instances.
+  const culled = [];
+  opaqueScene.traverse(object => {
+    if (object.isMesh) { culled.push([object, object.frustumCulled]); object.frustumCulled = false; }
+  });
+  try { render(true); await drainGPU(); }
+  finally { for (const [object, value] of culled) object.frustumCulled = value; }
+
+  if (!controls) return;
+  const saved = { x: controls.pos.x, z: controls.pos.z, eyeY: controls.eyeY,
+    yaw: controls.yaw, pitch: controls.pitch };
+  try {
+    // Exercise moving water-mesh tables, both above/below-water paths, grazing
+    // waterline views, and scenery turns before any of them can be seen.
+    const views = [
+      [saved.x + .12, saved.z, saved.eyeY, saved.yaw, saved.pitch],
+      [saved.x - .12, saved.z, saved.eyeY - .3, 0, -.4],
+      [saved.x, saved.z, saved.eyeY, Math.PI, -.06],
+      [saved.x, saved.z, saved.eyeY, -Math.PI / 2, -.06],
+      [saved.x, saved.z, saved.eyeY, Math.PI / 2, -.06],
+      [saved.x, -6, .25, 0, -.15],
+      [saved.x, -6, -.4, 0, .85],
+      [saved.x, -6, -.4, Math.PI, -.35],
+    ];
+    for (const [x, z, eyeY, yaw, pitch] of views) {
+      controls.pos.x = x; controls.pos.z = z; controls.eyeY = eyeY;
+      controls.yaw = yaw; controls.pitch = pitch;
+      render(true);
+      await drainGPU();
+      if (surfaceProbe?.pending) await surfaceProbe.ready;
+      await nextPaint();
+    }
+  } finally {
+    controls.pos.x = saved.x; controls.pos.z = saved.z; controls.eyeY = saved.eyeY;
+    controls.yaw = saved.yaw; controls.pitch = saved.pitch;
+    surfaceProbe?.reset();
+    shared.uUnderwaterOn.value = 0;
+    updateCamera(simT); updateFocus();
+  }
+}
+async function warmAnimatedFrames() {
+  // Rehearse the real fixed-step + render combination, not just isolated stills.
+  // This covers alternating simulation/exposure buffers, changing FFT fields,
+  // texture updates and first-use driver work. The final seek below restores the
+  // requested wave time, so startup preparation never skips the opening waves.
+  for (let i = 0; i < 30; i++) {
+    await nextPaint();
+    clock.advance(1 / 60, 1, stepSim);
+    render(true);
+    await drainGPU();
+    loading('Preparing the first moments', 48 + 4 * (i + 1) / 30);
+  }
+  clock.reset();
+  mark('animated-frames-warmed');
 }
 async function warmSimulation(t, report = true) {
   surfaceProbe?.reset();
@@ -663,28 +734,31 @@ async function start() {
     surfaceProbe.request(renderer,camera,simT,controls.pos.x,-10,true);
     await surfaceProbe.ready;
   }
-  if(controls){
-    const saved={x:controls.pos.x,z:controls.pos.z,eyeY:controls.eyeY,pitch:controls.pitch};
-    controls.pos.z=-6;controls.eyeY=-.40;controls.pitch=.85;
-    render();await drainGPU();await breathe();
-    controls.pos.x=saved.x;controls.pos.z=saved.z;controls.eyeY=saved.eyeY;controls.pitch=saved.pitch;
-    shared.uUnderwaterOn.value=0;
-  }
+  await warmViews();
+  await warmAnimatedFrames();
   mark('render-passes-warmed');
   await warmSimulation(START_T);
   loading('Finishing the light', 91);
-  // Warm views behind and along the shore without moving the simulation domain.
-  if (controls) {
-    const yaw = controls.yaw, pitch = controls.pitch;
-    for (const angle of [Math.PI, -Math.PI / 2, Math.PI / 2]) {
-      controls.yaw = angle; controls.pitch = -0.06; render(); await drainGPU(); await breathe();
-    }
-    controls.yaw = yaw; controls.pitch = pitch;
-  }
   post.meter.reset();
-  render(); await drainGPU(); mark('ready');
+  // Present repeated final-size frames while still covered. Keep simulation
+  // time fixed and wait for both the GPU and the browser's paint cadence.
+  // If a resize landed during startup, prepare its new attachments here too.
+  let settled = 0;
+  while (settled < 8) {
+    await nextPaint();
+    const revision = targetRevision, programs = renderer.info.programs.length;
+    if (resizeTimer) { clearTimeout(resizeTimer); resizeTimer = null; resize(); }
+    render(); await drainGPU();
+    if (surfaceProbe?.pending) await surfaceProbe.ready;
+    settled = !resizeTimer && revision === targetRevision && programs === renderer.info.programs.length ? settled + 1 : 0;
+    loading('Finishing the light', 91 + settled);
+  }
+  clock.reset(); frameDt = 0; dyn.acc = dyn.n = 0;
+  window.__graphicsInfo = checkShaderBudget(gl, renderer.info.programs);
+  mark('ready');
   loading('Welcome to the shore', 100);
   window.__ready = true;
+  chrome.forEach(el => { el.inert = false; });
   overlay.classList.add('hide');
   last = performance.now();
   if (!CAPTURE) requestAnimationFrame(frame);

@@ -1,5 +1,17 @@
 # Changelog
 
+## Startup preparation — 2026-09-20
+
+- Draw off-camera scenery and both breaker slots behind the loader so their
+  geometry and render state are prepared before the first turn.
+- Warm moving water-mesh tables, waterline views, and underwater views facing
+  both toward the sea and toward the beach.
+- Rehearse 30 combined simulation/render frames, then restore the opening wave
+  time and camera. Wait for eight stable final-size frames and pending GPU work.
+- Keep scene controls out of keyboard focus until preparation finishes, and
+  keep the loader visible if GPU synchronization cannot be established.
+- Preserve all quality budgets, scene assets, shaders, and simulation settings.
+
 ## 0.1.0 — 2026-09-20
 
 First public source package, based on the ShoreBreak revision 23 live build.
