@@ -1,0 +1,303 @@
+[
+  {
+    "package": "@oxc-project/types",
+    "version": "0.150.0",
+    "license": "MIT",
+    "development": true,
+    "optional": false
+  },
+  {
+    "package": "@rolldown/binding-android-arm-eabi",
+    "version": "1.2.9",
+    "license": "MIT",
+    "development": true,
+    "optional": true
+  },
+  {
+    "package": "@rolldown/binding-android-arm64",
+    "version": "1.2.9",
+    "license": "MIT",
+    "development": true,
+    "optional": true
+  },
+  {
+    "package": "@rolldown/binding-darwin-arm64",
+    "version": "1.2.9",
+    "license": "MIT",
+    "development": true,
+    "optional": true
+  },
+  {
+    "package": "@rolldown/binding-darwin-x64",
+    "version": "1.2.9",
+    "license": "MIT",
+    "development": true,
+    "optional": true
+  },
+  {
+    "package": "@rolldown/binding-freebsd-x64",
+    "version": "1.2.9",
+    "license": "MIT",
+    "development": true,
+    "optional": true
+  },
+  {
+    "package": "@rolldown/binding-linux-arm-gnueabihf",
+    "version": "1.2.9",
+    "license": "MIT",
+    "development": true,
+    "optional": true
+  },
+  {
+    "package": "@rolldown/binding-linux-arm64-gnu",
+    "version": "1.2.9",
+    "license": "MIT",
+    "development": true,
+    "optional": true
+  },
+  {
+    "package": "@rolldown/binding-linux-arm64-musl",
+    "version": "1.2.9",
+    "license": "MIT",
+    "development": true,
+    "optional": true
+  },
+  {
+    "package": "@rolldown/binding-linux-ppc64-gnu",
+    "version": "1.2.9",
+    "license": "MIT",
+    "development": true,
+    "optional": true
+  },
+  {
+    "package": "@rolldown/binding-linux-s390x-gnu",
+    "version": "1.2.9",
+    "license": "MIT",
+    "development": true,
+    "optional": true
+  },
+  {
+    "package": "@rolldown/binding-linux-x64-gnu",
+    "version": "1.2.9",
+    "license": "MIT",
+    "development": true,
+    "optional": true
+  },
+  {
+    "package": "@rolldown/binding-linux-x64-musl",
+    "version": "1.2.9",
+    "license": "MIT",
+    "development": true,
+    "optional": true
+  },
+  {
+    "package": "@rolldown/binding-openharmony-arm64",
+    "version": "1.2.9",
+    "license": "MIT",
+    "development": true,
+    "optional": true
+  },
+  {
+    "package": "@rolldown/binding-win32-arm64-msvc",
+    "version": "1.2.9",
+    "license": "MIT",
+    "development": true,
+    "optional": true
+  },
+  {
+    "package": "@rolldown/binding-win32-x64-msvc",
+    "version": "1.2.9",
+    "license": "MIT",
+    "development": true,
+    "optional": true
+  },
+  {
+    "package": "@rolldown/pluginutils",
+    "version": "1.0.1",
+    "license": "MIT",
+    "development": true,
+    "optional": false
+  },
+  {
+    "package": "detect-libc",
+    "version": "2.1.2",
+    "license": "Apache-2.0",
+    "development": true,
+    "optional": false
+  },
+  {
+    "package": "fdir",
+    "version": "6.5.0",
+    "license": "MIT",
+    "development": true,
+    "optional": false
+  },
+  {
+    "package": "fsevents",
+    "version": "2.3.3",
+    "license": "MIT",
+    "development": true,
+    "optional": true
+  },
+  {
+    "package": "lightningcss",
+    "version": "1.33.0",
+    "license": "MPL-2.0",
+    "development": true,
+    "optional": false
+  },
+  {
+    "package": "lightningcss-android-arm64",
+    "version": "1.33.0",
+    "license": "MPL-2.0",
+    "development": true,
+    "optional": true
+  },
+  {
+    "package": "lightningcss-darwin-arm64",
+    "version": "1.33.0",
+    "license": "MPL-2.0",
+    "development": true,
+    "optional": true
+  },
+  {
+    "package": "lightningcss-darwin-x64",
+    "version": "1.33.0",
+    "license": "MPL-2.0",
+    "development": true,
+    "optional": true
+  },
+  {
+    "package": "lightningcss-freebsd-x64",
+    "version": "1.33.0",
+    "license": "MPL-2.0",
+    "development": true,
+    "optional": true
+  },
+  {
+    "package": "lightningcss-linux-arm-gnueabihf",
+    "version": "1.33.0",
+    "license": "MPL-2.0",
+    "development": true,
+    "optional": true
+  },
+  {
+    "package": "lightningcss-linux-arm64-gnu",
+    "version": "1.33.0",
+    "license": "MPL-2.0",
+    "development": true,
+    "optional": true
+  },
+  {
+    "package": "lightningcss-linux-arm64-musl",
+    "version": "1.33.0",
+    "license": "MPL-2.0",
+    "development": true,
+    "optional": true
+  },
+  {
+    "package": "lightningcss-linux-x64-gnu",
+    "version": "1.33.0",
+    "license": "MPL-2.0",
+    "development": true,
+    "optional": true
+  },
+  {
+    "package": "lightningcss-linux-x64-musl",
+    "version": "1.33.0",
+    "license": "MPL-2.0",
+    "development": true,
+    "optional": true
+  },
+  {
+    "package": "lightningcss-win32-arm64-msvc",
+    "version": "1.33.0",
+    "license": "MPL-2.0",
+    "development": true,
+    "optional": true
+  },
+  {
+    "package": "lightningcss-win32-x64-msvc",
+    "version": "1.33.0",
+    "license": "MPL-2.0",
+    "development": true,
+    "optional": true
+  },
+  {
+    "package": "lil-gui",
+    "version": "0.21.0",
+    "license": "MIT",
+    "development": false,
+    "optional": false
+  },
+  {
+    "package": "nanoid",
+    "version": "3.3.19",
+    "license": "MIT",
+    "development": true,
+    "optional": false
+  },
+  {
+    "package": "picocolors",
+    "version": "1.1.1",
+    "license": "ISC",
+    "development": true,
+    "optional": false
+  },
+  {
+    "package": "picomatch",
+    "version": "4.0.7",
+    "license": "MIT",
+    "development": true,
+    "optional": false
+  },
+  {
+    "package": "playwright-core",
+    "version": "1.63.0",
+    "license": "Apache-2.0",
+    "development": true,
+    "optional": false
+  },
+  {
+    "package": "postcss",
+    "version": "8.5.28",
+    "license": "MIT",
+    "development": true,
+    "optional": false
+  },
+  {
+    "package": "rolldown",
+    "version": "1.2.9",
+    "license": "MIT",
+    "development": true,
+    "optional": false
+  },
+  {
+    "package": "source-map-js",
+    "version": "1.2.1",
+    "license": "BSD-3-Clause",
+    "development": true,
+    "optional": false
+  },
+  {
+    "package": "three",
+    "version": "0.186.0",
+    "license": "MIT",
+    "development": false,
+    "optional": false
+  },
+  {
+    "package": "tinyglobby",
+    "version": "0.2.17",
+    "license": "MIT",
+    "development": true,
+    "optional": false
+  },
+  {
+    "package": "vite",
+    "version": "8.3.0",
+    "license": "MIT",
+    "development": true,
+    "optional": false
+  }
+]

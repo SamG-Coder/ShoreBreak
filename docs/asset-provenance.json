@@ -1,0 +1,376 @@
+{
+  "checked_on": "2026-09-20",
+  "basis": "ShoreBreak revision 23",
+  "method": "Inherited source JPEG bytes matched the published Poly Haven MD5 and byte size for all six originals. Included WebPs are project derivatives, not byte-identical copies of the JPEGs.",
+  "sources": [
+    {
+      "id": "palm_bark",
+      "name": "Palm Bark",
+      "authors": {
+        "Charlotte Baglioni": "All"
+      },
+      "license": "CC0-1.0",
+      "asset_url": "https://polyhaven.com/a/palm_bark",
+      "license_url": "https://polyhaven.com/license"
+    },
+    {
+      "id": "rock_boulder_dry",
+      "name": "Rock Boulder Dry",
+      "authors": {
+        "Dimitrios Savva": "Photography",
+        "Rico Cilliers": "Processing"
+      },
+      "license": "CC0-1.0",
+      "asset_url": "https://polyhaven.com/a/rock_boulder_dry",
+      "license_url": "https://polyhaven.com/license"
+    },
+    {
+      "id": "sand_03",
+      "name": "Sand 03",
+      "authors": {
+        "Charlotte Baglioni": "All"
+      },
+      "license": "CC0-1.0",
+      "asset_url": "https://polyhaven.com/a/sand_03",
+      "license_url": "https://polyhaven.com/license"
+    }
+  ],
+  "inherited_source_checks": [
+    {
+      "asset": "palm_bark",
+      "reference": "bark-diff.jpg",
+      "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/palm_bark/palm_bark_diff_2k.jpg",
+      "md5": "5a32fc35df11b7f2f9e5bb7eb69a61f1",
+      "size": 2942835,
+      "sha256": "5be19ff60fef0cbddb4381e345a76fdeabcc184d643efbf55f0b34ec687cf480",
+      "verified_against": "https://api.polyhaven.com/files/palm_bark"
+    },
+    {
+      "asset": "palm_bark",
+      "reference": "bark-normal.jpg",
+      "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/palm_bark/palm_bark_nor_gl_2k.jpg",
+      "md5": "995b7fe587a33e92f8732d6ae54cd11f",
+      "size": 5285941,
+      "sha256": "03aec0241647d43f3d14a7596bb54ba2d43d1f4cd3a28b5a880b4abd9bf08161",
+      "verified_against": "https://api.polyhaven.com/files/palm_bark"
+    },
+    {
+      "asset": "palm_bark",
+      "reference": "bark-rough.jpg",
+      "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/palm_bark/palm_bark_rough_2k.jpg",
+      "md5": "476c6f9b14f0484291044ae0ea3cc055",
+      "size": 1144620,
+      "sha256": "385d843d72193f1039fe9fa5ca521c0cc8ad335c9e456cff21beb727a36896cf",
+      "verified_against": "https://api.polyhaven.com/files/palm_bark"
+    },
+    {
+      "asset": "rock_boulder_dry",
+      "reference": "rock-diff.jpg",
+      "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/rock_boulder_dry/rock_boulder_dry_diff_2k.jpg",
+      "md5": "fbc9cf377db427f54381f463c0639e1f",
+      "size": 3437626,
+      "sha256": "c66de7f7b48ef1ba542c17af780787ca6d43da2160a46ff3544dd9fcdf65ca30",
+      "verified_against": "https://api.polyhaven.com/files/rock_boulder_dry"
+    },
+    {
+      "asset": "rock_boulder_dry",
+      "reference": "rock-rough.jpg",
+      "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/rock_boulder_dry/rock_boulder_dry_arm_2k.jpg",
+      "md5": "acee3a43c7fc3bbe79c343cb3bb3b113",
+      "size": 3164814,
+      "sha256": "9ef398eebef2a9477daa6a260ebe85003de0790bb7d8f7e5fd0d80b6943ea70e",
+      "verified_against": "https://api.polyhaven.com/files/rock_boulder_dry"
+    },
+    {
+      "asset": "rock_boulder_dry",
+      "reference": "rock-normal.jpg",
+      "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/rock_boulder_dry/rock_boulder_dry_nor_gl_2k.jpg",
+      "md5": "513ef3fdaadd106c38a9c40919918cc0",
+      "size": 3307320,
+      "sha256": "72a3c96d563fc17ac36c568802e106222e6480512d98e07318e1f431cea33dd6",
+      "verified_against": "https://api.polyhaven.com/files/rock_boulder_dry"
+    }
+  ],
+  "bundled_files": [
+    {
+      "path": "public/THIRD-PARTY-NOTICES.txt",
+      "source_id": "third-party-notices",
+      "license": "MIT AND CC0-1.0 AND LicenseRef-Public-Domain",
+      "bytes": 11208,
+      "sha256": "6126d0eda2529aaefb3fd442940168095da177dfcebc9fbb37b3c0a5d8c5d57d"
+    },
+    {
+      "path": "public/assets/coast-r8/CREDITS.txt",
+      "source_id": "shorebreak-credits",
+      "license": "MIT",
+      "bytes": 767,
+      "sha256": "c800f9d76bc754579c0f8bf98d5b75a6be5680eb7f67ee94f7a20fab39d231e3"
+    },
+    {
+      "path": "public/assets/coast-r8/rock-diff.webp",
+      "source_id": "rock_boulder_dry",
+      "license": "CC0-1.0",
+      "bytes": 1048120,
+      "sha256": "acd49a498475909374a715a150172c16375337da990619e27482ad8589248d3b"
+    },
+    {
+      "path": "public/assets/coast-r8/rock-normal-rough.webp",
+      "source_id": "rock_boulder_dry",
+      "license": "CC0-1.0",
+      "bytes": 1116770,
+      "sha256": "6cddc07d9f02d2fe6df3d2f23db734536b08cc4bf019e8c85a0be3ead628b74f"
+    },
+    {
+      "path": "public/assets/coast-r8/sand-diff.webp",
+      "source_id": "sand_03",
+      "license": "CC0-1.0",
+      "bytes": 1025256,
+      "sha256": "684fc759d68bcd1d1238f66e50de207b7919408e94c2b909be5eb2aa0cc86d7b"
+    },
+    {
+      "path": "public/assets/coast-r8/sand-normal-rough.webp",
+      "source_id": "sand_03",
+      "license": "CC0-1.0",
+      "bytes": 1158396,
+      "sha256": "956ec39f7458b663451189a20f74f510b432f1adbed95f57977e2f2b5adb1429"
+    },
+    {
+      "path": "public/assets/palms-r6/CREDITS.txt",
+      "source_id": "shorebreak-credits",
+      "license": "MIT",
+      "bytes": 420,
+      "sha256": "8d4134d99cafdc3f6ee8f1f253c49a483cdfcdc248a73463133d50f78d64a06f"
+    },
+    {
+      "path": "public/assets/palms-r6/bark-diff.webp",
+      "source_id": "palm_bark",
+      "license": "CC0-1.0",
+      "bytes": 186782,
+      "sha256": "2b7b845fe7f143726c52f91517ccd55505a1cd584d4d724e34f1c0e360b0f7a0"
+    },
+    {
+      "path": "public/assets/palms-r6/bark-normal.webp",
+      "source_id": "palm_bark",
+      "license": "CC0-1.0",
+      "bytes": 489094,
+      "sha256": "c54333916bb5135f30277a79c25466f6bbdc158af87daafec0c4cf86c716bc0a"
+    },
+    {
+      "path": "public/assets/palms-r6/bark-rough.webp",
+      "source_id": "palm_bark",
+      "license": "CC0-1.0",
+      "bytes": 4214,
+      "sha256": "0d25b75556662a742646a0185c3e0d1e8dcaafc97332b87158068a342fd9fc85"
+    },
+    {
+      "path": "public/assets/palms-r6/manifest.json",
+      "source_id": "shorebreak-procedural",
+      "license": "MIT",
+      "bytes": 6985,
+      "sha256": "362f21966808082c4997beb47bc10205ca4f2771d3195cfbde89569890ea1948"
+    },
+    {
+      "path": "public/assets/palms-r6/palm-288-0-leaves.bin",
+      "source_id": "shorebreak-procedural",
+      "license": "MIT",
+      "bytes": 3428928,
+      "sha256": "d455819fc081483869838e0c867880c5ee03c5c30850df59d9a22db73ce2546e"
+    },
+    {
+      "path": "public/assets/palms-r6/palm-288-0-leaves.bin.gz",
+      "source_id": "shorebreak-procedural",
+      "license": "MIT",
+      "bytes": 894367,
+      "sha256": "6cd48769a4027576887c0a43ea462bdd7d31ebf509ff6377929b09718cc525d8"
+    },
+    {
+      "path": "public/assets/palms-r6/palm-288-0-trunk.bin",
+      "source_id": "shorebreak-procedural",
+      "license": "MIT",
+      "bytes": 110920,
+      "sha256": "e369fbc00d7c0c99635e09b996f8aa7b0d8d430a2c92b56fc87b2c5c98674c27"
+    },
+    {
+      "path": "public/assets/palms-r6/palm-288-0-trunk.bin.gz",
+      "source_id": "shorebreak-procedural",
+      "license": "MIT",
+      "bytes": 93383,
+      "sha256": "a13f1d761f5fb7bd2ea0b1aa4d1c9bcb83c70019e2d81879c93e04d723e4135e"
+    },
+    {
+      "path": "public/assets/palms-r6/palm-288-1-leaves.bin",
+      "source_id": "shorebreak-procedural",
+      "license": "MIT",
+      "bytes": 1830528,
+      "sha256": "a3d807ab58ed07f0170b3612cb9c390d429249b4b94b1461ce4829465dc587e7"
+    },
+    {
+      "path": "public/assets/palms-r6/palm-288-1-leaves.bin.gz",
+      "source_id": "shorebreak-procedural",
+      "license": "MIT",
+      "bytes": 518502,
+      "sha256": "bf0e862cd0013c706531519bf45ec80a9b478ef58282ca1572f94d939b2aa547"
+    },
+    {
+      "path": "public/assets/palms-r6/palm-288-1-trunk.bin",
+      "source_id": "shorebreak-procedural",
+      "license": "MIT",
+      "bytes": 110920,
+      "sha256": "e369fbc00d7c0c99635e09b996f8aa7b0d8d430a2c92b56fc87b2c5c98674c27"
+    },
+    {
+      "path": "public/assets/palms-r6/palm-288-1-trunk.bin.gz",
+      "source_id": "shorebreak-procedural",
+      "license": "MIT",
+      "bytes": 93383,
+      "sha256": "a13f1d761f5fb7bd2ea0b1aa4d1c9bcb83c70019e2d81879c93e04d723e4135e"
+    },
+    {
+      "path": "public/assets/palms-r6/palm-288-2-leaves.bin",
+      "source_id": "shorebreak-procedural",
+      "license": "MIT",
+      "bytes": 781056,
+      "sha256": "c88f7a020928eeb890f342bf0f124328871352a95ab674d589df16f8c26f70a6"
+    },
+    {
+      "path": "public/assets/palms-r6/palm-288-2-leaves.bin.gz",
+      "source_id": "shorebreak-procedural",
+      "license": "MIT",
+      "bytes": 229807,
+      "sha256": "a0320c01f3031314c10c2f5b4a318bd8d159df352dddaeb61283bf75e9386246"
+    },
+    {
+      "path": "public/assets/palms-r6/palm-288-2-trunk.bin",
+      "source_id": "shorebreak-procedural",
+      "license": "MIT",
+      "bytes": 110920,
+      "sha256": "e369fbc00d7c0c99635e09b996f8aa7b0d8d430a2c92b56fc87b2c5c98674c27"
+    },
+    {
+      "path": "public/assets/palms-r6/palm-288-2-trunk.bin.gz",
+      "source_id": "shorebreak-procedural",
+      "license": "MIT",
+      "bytes": 93383,
+      "sha256": "a13f1d761f5fb7bd2ea0b1aa4d1c9bcb83c70019e2d81879c93e04d723e4135e"
+    },
+    {
+      "path": "public/assets/palms-r6/palm-44-0-leaves.bin",
+      "source_id": "shorebreak-procedural",
+      "license": "MIT",
+      "bytes": 3571800,
+      "sha256": "2b977546846dd956503fa60627b86da9597b29dee88b91dcfb24eb800958247c"
+    },
+    {
+      "path": "public/assets/palms-r6/palm-44-0-leaves.bin.gz",
+      "source_id": "shorebreak-procedural",
+      "license": "MIT",
+      "bytes": 933221,
+      "sha256": "22b05d42d9e528dc2f39d628f98c9247b8eaedb15f671b186b27da925a532430"
+    },
+    {
+      "path": "public/assets/palms-r6/palm-44-0-trunk.bin",
+      "source_id": "shorebreak-procedural",
+      "license": "MIT",
+      "bytes": 141060,
+      "sha256": "7b0df85838690492d3ed57eefdc1f6f8f56c6a83635b4fd0b4487e533d4cd2c9"
+    },
+    {
+      "path": "public/assets/palms-r6/palm-44-0-trunk.bin.gz",
+      "source_id": "shorebreak-procedural",
+      "license": "MIT",
+      "bytes": 118229,
+      "sha256": "ee5c967422b7e0e06a837db1819990dacc64ce4273a19698e288026728751ac1"
+    },
+    {
+      "path": "public/assets/palms-r6/palm-44-1-leaves.bin",
+      "source_id": "shorebreak-procedural",
+      "license": "MIT",
+      "bytes": 1906800,
+      "sha256": "7f4158c2758817698b5440f0d33f14b898157186b60d6e0417d2db2c23e73713"
+    },
+    {
+      "path": "public/assets/palms-r6/palm-44-1-leaves.bin.gz",
+      "source_id": "shorebreak-procedural",
+      "license": "MIT",
+      "bytes": 539954,
+      "sha256": "ab2e6dd27f5f920f9124fecece182d44c24e4008c1e9c64ed93b10dc1131d045"
+    },
+    {
+      "path": "public/assets/palms-r6/palm-44-1-trunk.bin",
+      "source_id": "shorebreak-procedural",
+      "license": "MIT",
+      "bytes": 141060,
+      "sha256": "7b0df85838690492d3ed57eefdc1f6f8f56c6a83635b4fd0b4487e533d4cd2c9"
+    },
+    {
+      "path": "public/assets/palms-r6/palm-44-1-trunk.bin.gz",
+      "source_id": "shorebreak-procedural",
+      "license": "MIT",
+      "bytes": 118229,
+      "sha256": "ee5c967422b7e0e06a837db1819990dacc64ce4273a19698e288026728751ac1"
+    },
+    {
+      "path": "public/assets/palms-r6/palm-44-2-leaves.bin",
+      "source_id": "shorebreak-procedural",
+      "license": "MIT",
+      "bytes": 781056,
+      "sha256": "c051192777562bbbb6077f448b93112731556d6aa4937bb44c929c8b73b517c4"
+    },
+    {
+      "path": "public/assets/palms-r6/palm-44-2-leaves.bin.gz",
+      "source_id": "shorebreak-procedural",
+      "license": "MIT",
+      "bytes": 230030,
+      "sha256": "53e44999729989e70c97c17eba1326f4402961cd6008e49f70a4a3848983fe3c"
+    },
+    {
+      "path": "public/assets/palms-r6/palm-44-2-trunk.bin",
+      "source_id": "shorebreak-procedural",
+      "license": "MIT",
+      "bytes": 141060,
+      "sha256": "7b0df85838690492d3ed57eefdc1f6f8f56c6a83635b4fd0b4487e533d4cd2c9"
+    },
+    {
+      "path": "public/assets/palms-r6/palm-44-2-trunk.bin.gz",
+      "source_id": "shorebreak-procedural",
+      "license": "MIT",
+      "bytes": 118229,
+      "sha256": "ee5c967422b7e0e06a837db1819990dacc64ce4273a19698e288026728751ac1"
+    },
+    {
+      "path": "public/assets/stone-r6/CREDITS.txt",
+      "source_id": "shorebreak-credits",
+      "license": "MIT",
+      "bytes": 408,
+      "sha256": "2ae89e2a8a8edb06d8109e40b464e6a9b3b0746b9438a4e9d4384393eb6924e7"
+    },
+    {
+      "path": "public/assets/stone-r6/stone-diff.webp",
+      "source_id": "rock_boulder_dry",
+      "license": "CC0-1.0",
+      "bytes": 282226,
+      "sha256": "170dfac856dc23673e9fc6f97b2079651d2f6a0ba51ef23ffd23e78513260920"
+    },
+    {
+      "path": "public/assets/stone-r6/stone-normal.webp",
+      "source_id": "rock_boulder_dry",
+      "license": "CC0-1.0",
+      "bytes": 170936,
+      "sha256": "10afdfc048bc2fa8b4e8be2ac015c62c0556c0890c8e4c9a58d2387a59e62296"
+    },
+    {
+      "path": "public/assets/stone-r6/stone-rough.webp",
+      "source_id": "rock_boulder_dry",
+      "license": "CC0-1.0",
+      "bytes": 168514,
+      "sha256": "028d226dc448d8c303b4077a82372d1b7cb548c7202895f2f6a35e4c1f1c43fc"
+    },
+    {
+      "path": "public/favicon.svg",
+      "source_id": "shorebreak-procedural",
+      "license": "MIT",
+      "bytes": 297,
+      "sha256": "c095107d9a071df4230f64ee5431e800312e678cc887f79bda10da2d18b444f2"
+    }
+  ]
+}

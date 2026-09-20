@@ -1,0 +1,13 @@
+import fs from 'node:fs';
+import * as THREE from 'three';
+globalThis.location={search:'?explore'};
+const {SwashSim}=await import('../../src/swash/SwashSim.js');
+const {initCoastalBed,ROCKS}=await import('../../src/beach/CoastalBed.js');
+const shared={uFocus:{value:new THREE.Vector2(-35,-.5)},uTime:{value:0},uInjMass:{value:1},uInjSpeed:{value:1},uEvtCount:{value:0}};
+for(const k of 'ABCDEFG')shared['uEvt'+k]={value:new Float32Array(24)};
+initCoastalBed(shared);
+const noop=()=>{},r={setRenderTarget:noop,render:noop,clear:noop,setClearColor:noop,setClearAlpha:noop,getClearAlpha:()=>1};
+const sim=new SwashSim(r,shared),rock=shared.uRockBed.value;
+const out={relief:sim.pBed.material.uniforms.uRelief.value,filmTau:shared.uSweFilmTau.value,shaders:Object.fromEntries(['pBed','pFlux','pWet','pWetInit'].map(k=>[k,sim[k].material.fragmentShader])),rock:{width:rock.image.width,height:rock.image.height,data:Buffer.from(rock.image.data.buffer).toString('base64'),domain:shared.uRockDomain.value.toArray()},rocks:ROCKS};
+fs.mkdirSync('.qa',{recursive:true});fs.writeFileSync('.qa/hydraulics.json',JSON.stringify(out));
+console.log({rocks:ROCKS.length,hydraulicCells:rock.image.data.length,shaders:Object.keys(out.shaders).length});

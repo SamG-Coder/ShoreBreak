@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#0a2028" />
+<title>Shorebreak — The living coastline</title>
+<link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+<meta name="description" content="A living Mediterranean coastline. Explore the Baie des Anges: breaking waves, pale sand and coastal rocks, and the Promenade des Anglais." />
+</head>
+<body>
+<main id="stage" aria-label="Interactive ocean simulation"></main>
+<div id="loading" role="status" aria-live="polite">
+  <div class="load-top"><span>AWAKEWITHAI.COM</span><span>AN INTERACTIVE COASTLINE</span></div>
+  <div class="load-center"><p class="eyebrow">BAIE DES ANGES · MEDITERRANEAN SEA</p><h1>Shorebreak<span>.</span></h1><p class="load-description">A moment at the edge of the sea.</p>
+    <div class="load-meter"><div class="load-meta"><span id="load-status">Opening the coastline</span><span id="load-percent">0%</span></div><progress id="load-progress" max="100" value="0">0%</progress></div>
+    <button id="load-retry" hidden>Try again</button>
+  </div>
+  <div class="load-bottom"><span id="load-caption">Water, light, and motion. Prepared before you arrive.</span><span>SHOREBREAK / 12</span></div>
+</div>
+<header class="site-header chrome"><div class="wordmark">Shorebreak<span>.</span><small>BAIE DES ANGES</small></div><div class="header-actions"><button id="btn-help" aria-label="Show controls" aria-expanded="false">?</button><button id="btn-fs" title="Fullscreen (F)">Fullscreen</button></div></header>
+<div id="hud" hidden></div>
+<section id="help" class="panel" aria-label="Controls" hidden>
+  <div class="panel-heading"><h2>At the water’s edge</h2><button id="close-help" aria-label="Close controls">×</button></div>
+  <p>Click the beach to look around. Wade into deeper water to start swimming automatically. Turn toward the beach to walk ashore.</p>
+  <dl><dt>W A S D</dt><dd>Walk / swim</dd><dt>Mouse</dt><dd>Look around</dd><dt>Shift</dt><dd>Run / swim faster</dd><dt>C</dt><dd>Crouch on land / dive while swimming</dd><dt>Esc</dt><dd>Release the mouse</dd><dt>Space</dt><dd>Jump</dd><dt>P</dt><dd>Pause the waves</dd><dt>F</dt><dd>Fullscreen</dd><dt>H</dt><dd>Show controls</dd><dt>U</dt><dd>Hide the interface</dd></dl>
+  <label class="motion-option"><input type="checkbox" id="steady-camera" /> Steady camera</label>
+  <p>Resolution boosts sharpness above the selected quality setting. 150% renders 2.25× as many pixels; 200% renders 4×. Higher settings can lower FPS. Return to 100% to use Auto’s adaptive resolution.</p>
+  <p class="touch-note">On touch screens, drag to look. Use your left thumb to walk or swim; push the stick fully for more speed.</p>
+</section>
+<nav class="control-dock chrome" aria-label="Scene controls">
+  <button id="btn-pause" aria-label="Pause waves" title="Pause waves (P)"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M7 4v12M13 4v12" /></svg></button>
+  <label class="select-wrap"><span class="sr-only">Playback speed</span><select id="speed"><option value="1">Real time</option><option value="0.25">¼ speed</option><option value="0.1">⅒ speed</option></select></label>
+  <button id="btn-crouch" aria-pressed="false" title="Crouch / stand (C)">Crouch · C</button><div class="dock-separator"></div><div class="render-settings"><label class="select-wrap"><span class="quality-label" aria-hidden="true">Quality</span><span class="sr-only">Rendering quality</span><select id="quality"><option value="auto">Auto</option><option value="low">Low</option><option value="medium">Medium</option><option value="high">High</option><option value="ultra">Ultra</option></select></label><label class="select-wrap resolution-wrap" title="Resolution boost · 150% uses 2.25× pixels · 200% uses 4× pixels"><span class="quality-label" aria-hidden="true">Resolution</span><span class="sr-only">Rendering resolution</span><select id="resolution"><option value="1">100%</option><option value="1.5">150%</option><option value="2">200%</option></select></label></div>
+</nav>
+<div class="scene-caption chrome"><span><span id="scene-state">THE LIVING COASTLINE</span> <span id="movement-state" role="status" aria-live="polite"></span></span><span class="credit">AN <a href="https://awakewithai.com" target="_blank" rel="noopener">AWAKEWITHAI.COM</a> PRODUCTION</span></div>
+<div id="explore-hint" class="chrome" hidden><span class="mouse">Click to look · <b>W A S D</b> walk / swim · <b>Shift</b> faster · <b>C</b> crouch</span><span class="touch">Drag to look · left thumb to walk / swim</span></div>
+<div id="crosshair" hidden></div><div id="stick"><div></div></div>
+<noscript><p class="noscript">Enable JavaScript to open Shorebreak.</p></noscript>
+<script type="module" src="/src/boot.js"></script>
+</body>
+</html>

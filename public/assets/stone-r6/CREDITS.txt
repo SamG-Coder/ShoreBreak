@@ -1,0 +1,7 @@
+Promenade textures: Rock Boulder Dry, Poly Haven; CC0-1.0.
+Photography: Dimitrios Savva. Processing: Rico Cilliers.
+https://polyhaven.com/a/rock_boulder_dry
+https://polyhaven.com/license
+1024-pixel WebP derivatives of original 2K Diffuse, nor_gl, ARM JPEG maps.
+stone-rough.webp retains RGB ARM packing; roughness is the green channel.
+Original source checksums and final hashes: docs/asset-provenance.json.

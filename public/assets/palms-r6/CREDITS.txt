@@ -1,0 +1,7 @@
+Palm geometry: Christopher Canavan, Ashore/Jellys/ShoreBreak; MIT.
+Generators: tools/vendor/date-palm.js and tools/vendor/ashore-leaf.js.
+Bark textures: Palm Bark by Charlotte Baglioni, Poly Haven; CC0-1.0.
+https://polyhaven.com/a/palm_bark
+https://polyhaven.com/license
+1024-pixel WebP derivatives of original 2K Diffuse, nor_gl, Rough JPEG maps.
+Original source checksums and final hashes: docs/asset-provenance.json.

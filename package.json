@@ -1,0 +1,38 @@
+{
+  "name": "shorebreak",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Real-time breaking waves, swash and underwater optics in Three.js / WebGL 2.",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build --emptyOutDir",
+    "preview": "vite preview",
+    "capture": "node tools/capture.mjs",
+    "test": "node --test tools/*.test.mjs",
+    "check": "npm test && npm run build",
+    "bake:palms": "node tools/bake-palms.mjs",
+    "licenses:check": "node tools/check-assets.mjs"
+  },
+  "dependencies": {
+    "three": "0.186.0",
+    "lil-gui": "0.21.0"
+  },
+  "devDependencies": {
+    "vite": "8.3.0",
+    "playwright-core": "1.63.0"
+  },
+  "license": "MIT",
+  "author": "Christopher Canavan",
+  "homepage": "https://shorebreak-living-coast.netlify.app/",
+  "engines": {
+    "node": ">=24 <25"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cryptomanavan/ShoreBreak.git"
+  },
+  "bugs": {
+    "url": "https://github.com/cryptomanavan/ShoreBreak/issues"
+  }
+}

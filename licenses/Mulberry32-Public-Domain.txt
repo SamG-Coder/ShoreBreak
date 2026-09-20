@@ -1,0 +1,5 @@
+Mulberry32 JavaScript implementation by bryc
+Original generator by Tommy Ettinger
+License: Public domain.
+Source: https://github.com/bryc/code/blob/master/jshash/PRNGs.md
+Original: https://gist.github.com/tommyettinger/46a874533244883189143505d203312c

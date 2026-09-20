@@ -1,0 +1,16 @@
+Shorebreak revision 08 coastal materials
+
+Photographic PBR textures, CC0, from Poly Haven:
+Sand 03 — Charlotte Baglioni
+https://polyhaven.com/a/sand_03
+Rock Boulder Dry — photography by Dimitrios Savva; processing by Rico Cilliers
+https://polyhaven.com/a/rock_boulder_dry
+License: https://polyhaven.com/license
+
+Color maps: 2048 px WebP, sRGB.
+Normal maps: 2048 px OpenGL normal, linear RGB. Alpha holds roughness.
+Roughness is filtered at 256 px and quantized to 32 levels before packing.
+Color and fine normal detail retain the photographic source resolution.
+The rock geometry is procedurally shaped, not photogrammetry. The pale sandy
+beach is an artistic interpretation requested for this scene, not a surveyed
+representation of Nice's natural pebble beach.
