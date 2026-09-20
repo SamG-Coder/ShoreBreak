@@ -15,8 +15,12 @@ Date: 2026-09-20. Source release: 0.1.0, based on ShoreBreak revision 23.
 | Relative documentation links | No missing linked files |
 | Release hygiene scan | No recognized secret tokens, private keys, credential URLs, or internal workspace identifiers found |
 
-The included GitHub Actions workflow is configured for Linux and Windows. It
-has not run on GitHub yet. The checks above ran locally in the release workspace.
+The checks above ran locally in the release workspace. The first GitHub Actions
+run also passed all 79 tests on Linux and Windows, plus the Linux production
+build. The Windows asset check identified checkout line-ending conversion in
+`public/favicon.svg`; `.gitattributes` now explicitly preserves its LF endings.
+See the [Actions page](https://github.com/cryptomanavan/ShoreBreak/actions) for
+the latest complete results on both operating systems.
 No new hardware FPS measurements or browser visual tests were performed for
 this packaging-only release. Earlier revision 23 native render validation is
 not a substitute for testing on a contributor's own GPU and browser.
