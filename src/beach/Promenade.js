@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import {assetUrl} from '../core/assets.js';
 import { glslDefines } from '../config.js';
 import { NOISE, SKY } from '../glsl/common.js';
 import { LAND, BEND_GLSL, FAR_X } from './terrain.js';
@@ -335,7 +336,7 @@ export class Promenade {
   async loadAssets(renderer){
     const loader=new THREE.TextureLoader();
     await Promise.all([['diff','uStone'],['normal','uStoneNormal'],['rough','uStoneRough']].map(async([kind,key])=>{
-      const t=await loader.loadAsync(`/assets/stone-r6/stone-${kind}.webp`);
+      const t=await loader.loadAsync(assetUrl(`assets/stone-r6/stone-${kind}.webp`));
       t.wrapS=t.wrapT=THREE.RepeatWrapping;t.anisotropy=Math.min(8,renderer.capabilities.getMaxAnisotropy());
       if(kind==='diff')t.colorSpace=THREE.SRGBColorSpace;
       renderer.initTexture(t);this.material.uniforms[key].value=t;

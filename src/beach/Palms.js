@@ -1,8 +1,9 @@
 import * as THREE from 'three';
+import {assetUrl} from '../core/assets.js';
 import { bayBendJS } from './terrain.js';
 import { COAST_PRE, coastUniforms } from './CoastMaterial.js';
 
-const ROOT='/assets/palms-r6/';
+const ROOT=assetUrl('assets/palms-r6/');
 const TYPES={Float32Array,Uint16Array,Uint32Array,Int16Array,Uint8Array};
 const VERT=/* glsl */`
 uniform float uTime;

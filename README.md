@@ -6,6 +6,8 @@ Forked from [Christopher Canavan's ShoreBreak](https://github.com/cryptomanavan/
 
 ![WebCuda rendering of the original breaking wave](docs/screenshots/webcuda-wave.png)
 
+**[Open the live app](https://SamG-Coder.github.io/ShoreBreak/)** · [Build and deployment runs](https://github.com/SamG-Coder/ShoreBreak/actions)
+
 ## Run
 
 Use Node.js 24 and a hardware-accelerated WebGPU browser:
@@ -43,10 +45,15 @@ GPU tests use Microsoft Edge on Windows; browser integration accepts `CHROME_PAT
 
 See [the integration details](docs/WEBCUDA.md), [calculation validation](docs/FAITHFUL-CUDA.md), and [asset provenance](docs/asset-provenance.json).
 
+GitHub Actions checks Linux and Windows builds before deploying `main` to Pages.
+See [publishing and subpath testing](docs/PUBLISHING.md). Generated CUDA artifacts
+are built from `ShoreBreak.cu` and are not kept in source control. All authoring,
+capture, and validation tools remain in `tools/`.
+
 ## Controls
 
 Click to look; WASD or arrows to walk/swim; Shift to move faster; C to crouch or dive; Space to jump; P to pause; 1/2/3 for playback speed; R to reset; F for fullscreen; H for help; U to hide the interface; Escape to release the pointer. Touch controls use the left side to move and the right side to look.
 
 ## License
 
-[MIT](LICENSE) for the original project and this port. CUDA WebShader retains its [MIT license](vendor/cuda-webshader/LICENSE). Included photographic textures remain CC0; see [asset credits](ASSETS.md), [third-party notices](THIRD_PARTY_NOTICES.md), and [the original README](docs/UPSTREAM-README.md).
+[MIT](LICENSE) for the original project and this port. CUDA WebShader retains its [MIT license](vendor/cuda-webshader/LICENSE). Included photographic textures remain CC0; see [asset credits](ASSETS.md) and [third-party notices](THIRD_PARTY_NOTICES.md).

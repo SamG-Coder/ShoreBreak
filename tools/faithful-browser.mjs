@@ -2,14 +2,16 @@ import {chromium} from 'playwright-core';
 import {createServer,preview} from 'vite';
 import {writeFile,mkdir} from 'node:fs/promises';
 const clip=process.argv.includes('--clip'),dist=process.argv.includes('--dist'),label=clip?'clip':'browser';
+const urlIndex=process.argv.indexOf('--url'),remote=urlIndex>=0?process.argv[urlIndex+1]:null;
 await mkdir('.qa/faithful',{recursive:true});
-const server=dist?await preview({logLevel:'error',preview:{port:0}}):await createServer({logLevel:'error',server:{port:0}});if(!dist)await server.listen();
+const server=remote?{close:async()=>{}}:dist?await preview({logLevel:'error',preview:{port:0}}):await createServer({logLevel:'error',server:{port:0}});if(!remote&&!dist)await server.listen();
+const base=remote?remote.replace(/\/?$/,'/'):`http://localhost:${server.httpServer.address().port}${process.env.VITE_BASE_PATH||'/'}`;
 const browser=await chromium.launchPersistentContext('.qa/faithful-'+label+'-profile',{executablePath:process.env.CHROME_PATH||'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe',headless:true,viewport:{width:960,height:640},args:['--enable-unsafe-webgpu']});
 try{
  const page=await browser.newPage(),errors=[];
  page.on('pageerror',e=>{console.error(e.stack);errors.push(String(e));});page.on('console',m=>{if(m.type()==='error'){errors.push(m.text());console.error(m.text());}});
  await page.addInitScript(()=>{window.__webglCalls=[];const original=HTMLCanvasElement.prototype.getContext;HTMLCanvasElement.prototype.getContext=function(type,...args){if(type.includes('webgl'))window.__webglCalls.push(type);return original.call(this,type,...args);};});
- await page.goto(`http://localhost:${server.httpServer.address().port}/?capture&w=480&h=320${clip?'&clip':''}`);
+ await page.goto(`${base}?capture&w=480&h=320${clip?'&clip':''}`);
  const progress=setInterval(async()=>{try{console.log(await page.evaluate(()=>({loading:document.getElementById('load-status')?.textContent,percent:document.getElementById('load-percent')?.textContent,marks:window.__marks?.at(-1)})));}catch{}},30000);
  try{await page.waitForFunction(()=>window.__ready||document.getElementById('loading')?.classList.contains('failed'),null,{timeout:600000});}finally{clearInterval(progress);}
  await page.waitForTimeout(1000);
@@ -30,6 +32,6 @@ try{
  await page.evaluate(async()=>{window.__scene.renderer.setSize(641,359);await window.__draw();});
  await page.evaluate(()=>window.__scene.renderer.idle());
  const gpuErrors=await page.evaluate(()=>window.__scene.renderer.errors);
- await writeFile(`.qa/faithful/${label}.json`,JSON.stringify({state,errors,gpuErrors,timings,dist},null,2));
+ await writeFile(`.qa/faithful/${label}.json`,JSON.stringify({state,errors,gpuErrors,timings,dist,url:base},null,2));
  if(errors.length||gpuErrors.length||state.webglCalls.length)throw Error('Browser GPU validation failed');
 }finally{await browser.close();await server.close();}

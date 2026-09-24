@@ -1,16 +1,16 @@
-name: Test and build
+name: CUDA port checks
 
 on:
-  push:
-    branches: [main, webcuda-migration]
   pull_request:
   workflow_dispatch:
+  workflow_call:
 
 permissions:
   contents: read
 
 jobs:
   verify:
+    name: Test and build (${{ matrix.os }})
     strategy:
       fail-fast: false
       matrix:
@@ -28,4 +28,11 @@ jobs:
       - run: npm ci
       - run: npm test
       - run: npm run licenses:check
-      - run: npm run build
+      - name: Build for a project subpath
+        run: npm run build
+        env:
+          VITE_BASE_PATH: /${{ github.event.repository.name }}/
+      - name: Check deployed asset paths
+        run: node tools/pages-check.mjs
+        env:
+          VITE_BASE_PATH: /${{ github.event.repository.name }}/

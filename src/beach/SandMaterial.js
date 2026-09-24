@@ -1,9 +1,10 @@
 import * as THREE from 'three';
+import {assetUrl} from '../core/assets.js';
 import { CAUSTICS } from '../glsl/underwater.js';
 
 export async function loadCoastTextures(renderer,kind,uniforms){
   await Promise.all(['diff','normal-rough'].map(async suffix=>{
-    const texture=await new THREE.TextureLoader().loadAsync(`/assets/coast-r8/${kind}-${suffix}.webp`);
+    const texture=await new THREE.TextureLoader().loadAsync(assetUrl(`assets/coast-r8/${kind}-${suffix}.webp`));
     texture.wrapS=texture.wrapT=THREE.RepeatWrapping;
     texture.minFilter=THREE.LinearMipmapLinearFilter;
     texture.magFilter=THREE.LinearFilter;

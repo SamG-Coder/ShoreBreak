@@ -1,5 +1,6 @@
 import {Color,Vector2,Matrix3,Matrix4,Frustum} from 'three/src/Three.Core.js';
 import {graphicsStage} from './graphics-stage.js';
+import {assetUrl} from '../core/assets.js';
 import {contextLayout,packContext,shaderKey} from './graphics-layout.js';
 const U=GPUTextureUsage,B=GPUBufferUsage;
 const factors={200:'zero',201:'one',202:'src',203:'one-minus-src',204:'src-alpha',205:'one-minus-src-alpha',206:'dst-alpha',207:'one-minus-dst-alpha',208:'dst',209:'one-minus-dst'};
@@ -11,8 +12,8 @@ export class WebCudaRenderer{
   const features=['shader-f16','float32-filterable','float32-blendable'].filter(f=>adapter.features.has(f));
   const requiredLimits={};for(const k of ['maxSampledTexturesPerShaderStage','maxSamplersPerShaderStage','maxStorageBuffersPerShaderStage','maxInterStageShaderVariables','maxColorAttachmentBytesPerSample'])requiredLimits[k]=adapter.limits[k];
   const device=await adapter.requestDevice({requiredFeatures:features,requiredLimits});
-  const manifest=await fetch('/faithful/graphics/index.json').then(r=>r.json()),artifacts={};
-  await Promise.all(Object.entries(manifest).map(async([key,id])=>{artifacts[key]=await Promise.all(['vertex','fragment'].map(stage=>fetch(`/faithful/graphics/${id}-${stage}.json`).then(r=>r.json())));artifacts[key].id=id;}));
+  const manifest=await fetch(assetUrl('faithful/graphics/index.json')).then(r=>r.json()),artifacts={};
+  await Promise.all(Object.entries(manifest).map(async([key,id])=>{artifacts[key]=await Promise.all(['vertex','fragment'].map(stage=>fetch(assetUrl(`faithful/graphics/${id}-${stage}.json`)).then(r=>r.json())));artifacts[key].id=id;}));
   const renderer=new WebCudaRenderer(device,artifacts,options);renderer.gpu=gpu;renderer.adapter=adapter;renderer.mipKey=Object.keys(manifest).find(k=>manifest[k]==='mip');return renderer;
  }
  constructor(device,artifacts,options){
