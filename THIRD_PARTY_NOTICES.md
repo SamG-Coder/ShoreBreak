@@ -1,5 +1,12 @@
 # Third-party notices
 
+## WebCuda fork addition
+
+CUDA WebShader compiler/runtime, Copyright (c) 2026 SamG-Coder and CUDA WebShader
+contributors, MIT. Source: https://github.com/SamG-Coder/cuda-webshader at
+f0f3699b498cfe6fe5419e072a4f4e2faa63b781. Full license: `vendor/cuda-webshader/LICENSE`.
+The original project and asset notices below remain applicable.
+
 The MIT license in the repository root covers original ShoreBreak contributions.
 It does not replace the licenses of the components listed here. Keep their
 required notices when redistributing source or a built application.

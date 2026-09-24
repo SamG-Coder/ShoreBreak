@@ -3,36 +3,40 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "description": "Real-time breaking waves, swash and underwater optics in Three.js / WebGL 2.",
+  "description": "ShoreBreak with CUDA-authored simulation, ray rendering and post-processing through WebCuda / WebGPU.",
   "scripts": {
+    "predev": "npm run compile:cuda",
     "dev": "vite",
-    "build": "vite build --emptyOutDir",
+    "build": "npm run compile:cuda && vite build --emptyOutDir",
     "preview": "vite preview",
     "capture": "node tools/capture.mjs",
-    "test": "node --test tools/*.test.mjs",
+    "test": "npm run compile:cuda && node --test tools/*.test.mjs",
+    "compile:cuda": "node tools/compile-webcuda.mjs",
+    "bake:cuda-scene": "node tools/bake-webcuda-scene.mjs",
+    "test:webcuda": "node tools/webcuda-browser.mjs",
+    "test:webcuda:dist": "node tools/webcuda-browser.mjs --dist",
     "check": "npm test && npm run build",
     "bake:palms": "node tools/bake-palms.mjs",
     "licenses:check": "node tools/check-assets.mjs"
   },
-  "dependencies": {
-    "three": "0.186.0",
-    "lil-gui": "0.21.0"
-  },
+  "dependencies": {},
   "devDependencies": {
+    "three": "0.186.0",
+    "lil-gui": "0.21.0",
     "vite": "8.3.0",
     "playwright-core": "1.63.0"
   },
   "license": "MIT",
   "author": "Christopher Canavan",
-  "homepage": "https://shorebreak-living-coast.netlify.app/",
+  "homepage": "https://github.com/SamG-Coder/ShoreBreak",
   "engines": {
     "node": ">=24 <25"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/cryptomanavan/ShoreBreak.git"
+    "url": "git+https://github.com/SamG-Coder/ShoreBreak.git"
   },
   "bugs": {
-    "url": "https://github.com/cryptomanavan/ShoreBreak/issues"
+    "url": "https://github.com/SamG-Coder/ShoreBreak/issues"
   }
 }

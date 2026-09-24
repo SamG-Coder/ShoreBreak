@@ -1,5 +1,8 @@
 # Rendering architecture
 
+> This document describes the retained upstream WebGL implementation. The active fork
+> uses WebCuda; see [the WebCuda architecture and migration limits](WEBCUDA.md).
+
 ShoreBreak uses Three.js r186's WebGL renderer and a Vite frontend. Coordinates
 are in metres: **x** follows the shore, **y** points up, and positive **z** points
 inland. The nominal shoreline is near z = 0. The entry point is `src/boot.js`,

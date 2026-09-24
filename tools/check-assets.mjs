@@ -28,7 +28,11 @@ for (const item of manifest.bundled_files) {
 async function visit(directory) {
   for (const entry of await readdir(directory, { withFileTypes: true })) {
     const absolute = path.join(directory, entry.name);
-    if (entry.isDirectory()) await visit(absolute);
+    if (entry.isDirectory()) {
+      // Compiler outputs have their own content hashes in generated/manifest.json.
+      if (absolute === path.join(root,'public','generated')) continue;
+      await visit(absolute);
+    }
     else {
       const relative = path.relative(root, absolute).split(path.sep).join('/');
       if (!expected.has(relative)) errors.push(`Unlisted public file: ${relative}`);

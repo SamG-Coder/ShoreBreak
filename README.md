@@ -1,132 +1,105 @@
-# ShoreBreak
+# ShoreBreak — WebCuda
 
-**Real-time breaking waves in your browser.** Incoming swell, curling crests,
-crash foam, shallow-water swash, backwash, and underwater optics, built with
-Three.js r186 and WebGL 2.
+ShoreBreak running through [SamG-Coder's CUDA WebShader / WebCuda](https://github.com/SamG-Coder/cuda-webshader).
+Ocean computation, shallow water, foam, wetness, camera physics, geometry intersection,
+lighting, spray, bubbles, image filtering, tone mapping and final pixel packing are authored
+in CUDA and executed on WebGPU. **The browser does not load Three.js or create a WebGL context.**
 
-Created by **Christopher Canavan / [awakewithai.com](https://awakewithai.com)**.
+Forked from [Christopher Canavan's ShoreBreak](https://github.com/cryptomanavan/ShoreBreak),
+created for [awakewithai.com](https://awakewithai.com). Original authorship, MIT licensing,
+photo-material attribution, palm credits and source history are preserved.
 
-**[Explore the live demo](https://shorebreak-living-coast.netlify.app/)** ·
-[How it works](docs/ARCHITECTURE.md) · [Asset credits](ASSETS.md) ·
-[Contributing](CONTRIBUTING.md) · [MIT license](LICENSE)
+![WebCuda coastline](docs/screenshots/webcuda-opening.png)
 
-## Run locally
+## Run
 
-Install **Node.js 24.x**, which includes npm. Clone the repository and start
-the development server:
+Install Node.js 24, then:
 
 ```sh
-git clone https://github.com/cryptomanavan/ShoreBreak.git
-cd ShoreBreak
 npm ci
 npm run dev
 ```
 
-If you downloaded the source ZIP, extract it and run `npm ci` and `npm run dev`
-in the folder containing `package.json`.
+Open the localhost address printed by Vite. Use a browser with WebGPU and hardware
+acceleration. No CUDA Toolkit, NVIDIA-specific API, external compiler checkout, account,
+or API key is required. HTTPS is required when serving outside localhost.
 
-Open the local URL printed by Vite (normally `http://localhost:5173`). Let the
-loader finish, then click the scene to look around. No API keys, accounts,
-environment variables, paid assets, or separate asset downloads are needed.
-All runtime assets are included. The first `npm ci` needs internet access.
+The pinned WebCuda compiler and runtime are included in `vendor/cuda-webshader` at
+revision `f0f3699b498cfe6fe5419e072a4f4e2faa63b781`. Starting development or building
+regenerates all fourteen CUDA artifacts.
 
-Do not double-click `index.html`: the application needs an HTTP server.
+## What changed
 
-## Requirements
+The WebGL mesh renderer has been replaced by a CUDA compute renderer. CUDA intersects
+the water and terrain, queries a stackless BVH containing the original seafront and palm
+geometry, shades the result, projects droplets, filters the image and writes packed pixels.
+JavaScript copies those pixels directly to the WebGPU canvas; there is no handwritten
+presentation shader or Three.js renderer.
 
-- A browser with WebGL 2, hardware acceleration, and floating-point render
-  targets. A desktop computer with a capable GPU is recommended.
-- Keyboard and mouse provide the full experience; touch controls are included.
-- The project targets Node.js 24.x for development and builds. `.nvmrc` and
-  `.node-version` specify this version. Python is optional for native GPU diagnostics.
+The original bathymetry, rock-cluster locations, breaker stage table, initial event timing,
+opening viewpoint, seafront geometry and photographic materials are retained. The coast's
+core experience remains a walkable beach with breaking water, run-up, persistent wetness,
+spray, swimming and underwater views.
+
+**This is a CUDA reimplementation, not a pixel-identical translation of all upstream GLSL.**
+The ray renderer, shallow-water discretization, breaker interpolation and lighting differ.
+The FFT uses three 128×128 cascades. Shallow water uses a fixed 512×192 region covering
+128×18 metres. Palm geometry uses the original tier-1 meshes with shared BVHs.
+The old multi-pass contact-light/exposure pipeline, full far-bay panorama and original
+volumetric plume are not reproduced identically. See the [migration details](docs/WEBCUDA.md)
+for the exact implementation and limits.
+
+Upstream modules remain available as reference and for their numerical regression tests;
+the active entry is `src/boot.js` → `src/webcuda/main.js`. Three.js is retained only as a
+**development dependency** for those tests and the offline conversion of original scenery.
+The production dependency set is empty.
 
 ## Controls
 
 | Input | Action |
 | --- | --- |
-| Click / mouse | Capture the pointer / look around |
-| WASD or arrow keys | Walk, wade, or swim |
-| Shift | Run or swim faster |
-| C | Crouch on land; dip underwater while swimming |
-| Space | Jump on land |
-| P | Pause the waves |
-| 1 / 2 / 3 | Real time / quarter speed / tenth speed |
+| Click / mouse | Capture pointer / look |
+| WASD / arrows | Walk or swim |
+| Shift | Move faster |
+| C | Toggle crouch; dip underwater when swimming |
+| Space | Jump on a new press |
+| P | Pause water |
+| 1 / 2 / 3 | Normal / quarter / tenth playback speed |
+| R | Reset simulation and camera |
 | F | Fullscreen |
-| H | Show controls |
-| U | Hide the interface |
-| R | Restart the wave sequence |
-| Esc | Release the pointer |
+| H | Controls panel |
+| U | Hide interface |
+| Escape | Release pointer |
 
-Swimming starts automatically in deeper water. The **Steady camera** setting
-reduces gait motion; reduced-motion preferences are also supported.
+Touch: drag on the right to look; drag on the left to move. Push farther to move faster.
+Steady camera disables gait bob. Auto quality adapts render resolution while leaving
+simulation resolution fixed. Resolution boosts are honored independently of Auto.
 
-## Quality and performance
-
-Start with **Auto quality and 100% resolution**. Auto adjusts the rendering
-pixel budget while keeping the fluid simulation resolution fixed. Low, Medium,
-High, and Ultra select other pixel budgets. The scene occupies 75% of the
-browser's area, preserving its aspect ratio.
-
-Resolution boosts multiply each render dimension: 150% uses approximately
-2.25 times the pixels, and 200% uses four times the pixels, subject to hardware
-limits. Boosts hold the selected resolution; return to 100% for Auto's adaptive
-resolution. These settings persist in local storage.
-
-The loader fetches local assets, compiles shaders, uploads off-camera scenery,
-rehearses moving shoreline and underwater views, and runs animated simulation
-and render frames before enabling controls. It then restores the opening wave
-time and waits for the final render buffers to settle. Loading time and frame rate
-depend on the browser, GPU, viewport, and selected settings. There is no fixed
-FPS or zero-stutter guarantee.
-
-## Build and test
+## Build and validation
 
 ```sh
-npm test
-npm run licenses:check
-npm run build
+npm test                    # 79 upstream regression tests + 3 WebCuda artifact tests
+npm run licenses:check      # Original and converted asset checksums / attribution
+npm run build               # Compile CUDA, then build dist/
+npm run test:webcuda:dist   # Real browser GPU integration / physics / screenshots
 npm run preview
 ```
 
-The build is written to `dist/`; preview serves that build locally.
-`npm run check` runs the Node tests followed by a clean production build.
-The GitHub Actions workflow runs tests, asset-integrity checks, and builds on
-Linux and Windows. GPU visual inspection remains a separate check.
+The GPU integration test needs an installed Chrome or Edge; set `CHROME_PATH` for another
+Chromium executable. It validates shader creation, finite/nonnegative water, the resting-lake
+invariant, a 30-second simulated run, camera movement, and a non-aligned 641×359 presentation
+resize. Screenshots and measured timings are written under `captures/webcuda/`.
 
-Optional developer tools:
+Run `npm run bake:cuda-scene` only when changing the original scenery assets. The converted
+26.4 MiB BVH is included, so ordinary users do not need the conversion step. Changes to
+bundled assets require corresponding checksum updates in `docs/asset-provenance.json`.
 
-- `npm run bake:palms`: regenerate the included procedural palm geometry.
-- `npm run capture -- --times 3.3`: capture deterministic frames using an
-  installed Chrome/Chromium browser. See [development](docs/DEVELOPMENT.md).
-- [Native GPU diagnostics](tools/native/README.md): optional Python/Mesa tools
-  for shader compilation, sampler budgets, and deterministic scene replay.
+Static hosting publishes `dist/`. The inherited Netlify configuration still applies.
+The upstream public demo is the original WebGL project, not this fork.
 
-## What is being simulated?
+## License
 
-The visible ocean uses **meshes**: a three-cascade FFT wind sea, a scheduled
-breaker profile, and separate plunging-lip geometry. A GPU shallow-water solver
-handles swash and backwash. Foam, wetness, particles, and underwater effects are
-coupled to those fields. Underwater churn includes a bounded volume-marching
-pass; that does not make the main ocean surface ray marched.
-
-This is a physically motivated real-time graphics approximation, not a full
-three-dimensional Navier–Stokes fluid simulation. The Mediterranean scenery
-and pale sandy beach are an artistic interpretation, not a surveyed recreation
-of Nice. [Read the architecture guide](docs/ARCHITECTURE.md).
-
-## Deploy or publish the source
-
-The site is static. Netlify can build it with `npm run build` and publish `dist/`;
-the included `netlify.toml` sets these defaults. No server functions are required.
-See [publishing instructions](docs/PUBLISHING.md) for GitHub, Netlify, and ZIP releases.
-
-## License and credits
-
-Original project code, procedural geometry, and documentation are released under
-the [MIT license](LICENSE). Photographic materials retain their **CC0-1.0**
-license. Third-party components retain their own licenses; see
-[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
-
-The public package includes all runtime assets, their origins, and a checksum
-manifest in [ASSETS.md](ASSETS.md) and [asset provenance](docs/asset-provenance.json).
-Reference videos and reference photographs are not bundled.
+[MIT](LICENSE) for the original project and this port. CUDA WebShader retains its
+[MIT license](vendor/cuda-webshader/LICENSE). Included photographic textures remain CC0;
+see [asset credits](ASSETS.md), [third-party notices](THIRD_PARTY_NOTICES.md), and
+[the original README](docs/UPSTREAM-README.md).

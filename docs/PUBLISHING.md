@@ -1,3 +1,9 @@
+# WebCuda fork
+For this fork, build with `npm run build` and publish `dist/`. WebGPU requires HTTPS
+outside localhost. `public/generated` and the converted `public/assets/webcuda/scene.bin`
+are required runtime files. The upstream deployment instructions below describe the
+original WebGL project; this fork's source is https://github.com/SamG-Coder/ShoreBreak.
+
 # Publishing ShoreBreak
 
 The public source repository is

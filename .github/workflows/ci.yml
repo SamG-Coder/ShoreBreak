@@ -2,7 +2,7 @@ name: Test and build
 
 on:
   push:
-    branches: [main]
+    branches: [main, webcuda-migration]
   pull_request:
   workflow_dispatch:
 
