@@ -1,92 +1,29 @@
-# WebCuda migration
+# WebCuda integration
 
-## Runtime boundary
+The application starts at `src/boot.js`, then `src/main.js`. The original host code retains the scene, controls, deterministic schedule, initialization, texture precision, simulation resolutions, pass order and camera. `WebCudaRenderer` in `src/webcuda/renderer.js` replaces Three.js rendering with native WebGPU rendering of programs compiled from the single root `ShoreBreak.cu`.
 
-`src/webcuda/main.js` owns the DOM, keyboard/pointer/touch events, presentation size and
-the animation clock. `engine.js` loads assets, invokes the vendored WebCuda runtime,
-queues fixed-step dispatches and copies finished pixels to the canvas.
-There is no CPU surface sampling or simulation readback in the normal render loop.
-Readback is exposed only to the diagnostics/test API.
+The previous ray renderer and simplified wave equations have been removed. The original three 256 x 256 FFT cascades, Kurganov–Petrova flux, six substeps per 1/120-second step, scrolling shallow-water window, wave lookup tables, full lip geometry, whitewater, underwater effects and post-processing are retained.
 
-All executable GPU programs originate in `kernels/*.cu`. `tools/compile-webcuda.mjs`
-generates the original bathymetry and breaker table declarations, compiles fourteen
-entry points, and writes precompiled WGSL/ABI JSON artifacts. Every entry must compile
-before any artifact is replaced. The manifest records source and artifact SHA-256 hashes.
+## Source and build
 
-Presentation does not need a vertex/fragment pipeline: `finishFrame` writes RGBA/BGRA
-uint pixels, with rows padded to 256 bytes; `copyBufferToTexture` transfers them to the
-WebGPU swapchain. WebCuda owns all persistent GPU allocations. Resizing invalidates
-the affected cached bindings; device errors stop the frame loop and show the retry UI.
+`ShoreBreak.cu` is the canonical application GPU source. Each graphics stage is a conditional section in that file. The compute entry points provide separate numerical diagnostics of the same original calculations.
 
-## Implemented systems
+`npm run compile:cuda` reads the existing CUDA file directly and compiles each graphics entry with the vendored WebCuda compiler. It does not regenerate the CUDA from JavaScript or GLSL. `tools/graphics-metadata.json` describes stage IO and maps the original material identities to the corresponding CUDA stages. `public/faithful/graphics/build.json` records SHA-256 hashes of the CUDA source, compiler, metadata and generated artifacts. An unchanged build reuses verified artifacts.
 
-| Source | GPU work |
-| --- | --- |
-| `common.cu` | Bathymetry, original rock caps, seeded noise, scheduled breakers and original Hermite stage table |
-| `ocean.cu` | JONSWAP initialization, spectral evolution, Stockham inverse FFT and composition of three cascades |
-| `coast.cu` | Hydrostatic Rusanov shallow-water fluxes, wet/dry handling, foam transport, wetness, surface field and player motion |
-| `geometry.cu` | Stackless BVH traversal, triangle intersections and original palm instance transforms |
-| `render.cu` | Terrain/water ray intersection, curling sheet, Fresnel reflection, depth absorption, bottom caustics, sky, surface foam, fog and display filtering |
-| `spray.cu` | Event-driven ballistic spray / buoyant air markers and depth-tested projection |
-| `materials.cu` | Linear-light mip generation for original sand and rock textures |
+The optional `tools/port-*.mjs` files are authoring aids used for the mechanical translation. Original GLSL remains in the original host modules and in the test oracle. The production renderer uses it only to identify materials; it never compiles or executes it.
 
-FFT cascades have lengths 41 m, 7.3 m and 1.37 m, each with 128² complex modes.
-The shallow-water domain is x=[−64,64], z=[−6,12], sampled at 512×192, advanced at
-1/120 second. The solver uses reconstructed water levels over the hydraulic rock bed,
-Manning friction and infiltration above still-water level. Momentum is stored as h*u/h*v.
-Surface and camera use the same GPU-generated field. Motion includes wading drag,
-swimming hysteresis, running, crouching, single-press jumping, and optional gait bob.
+## GPU boundary
 
-The visible water field spans x=[−160,160], z=[−120,20] at 1024×512. There are 32,768
-potential spray/bubble markers, evaluated deterministically from event age on the GPU.
-Simulation time does not depend on render size. Camera movement remains active when
-water is paused. Rendering backpressure prevents an unbounded queue of GPU frames.
+`graphics-stage.js` supplies native stage IO, texture operations, derivatives, clip-space conversion and rasterization bindings to WebCuda's emitted WGSL. Application shading and simulation expressions come from CUDA. Matrix and vector helpers are CUDA functions in the same source file. A per-invocation context retains the semantics of the original shader globals.
 
-## Original geometry
+The renderer manages native textures, depth buffers, MRT attachments, mipmaps, geometry uploads, uniforms, blending, culling and asynchronous readback. It uses the original mesh geometry and instance transforms. GPU work is submitted in order, including before host updates of buffers used by queued draws.
 
-The offline scenery converter reads upstream `Seafront.js` and the supplied palm binaries.
-It preserves the seafront's triangle positions and colors, converts the original tier-1
-palm meshes, and adds the promenade wall cross-section. The resulting BVH contains
-321,606 triangles and 147,461 nodes in a 26.4 MiB asset. Palm BLAS geometry is shared
-across the original instance placements. The original assets remain bundled with their
-notices; the conversion is covered by the original MIT project license.
+Three.js CPU scene, geometry, texture descriptors and math classes remain in the host. No Three.js WebGLRenderer or WebGPURenderer is instantiated. Browser event handling, scheduling and CPU scene construction remain JavaScript.
 
-Three.js is used by this offline asset converter and the inherited upstream tests.
-It is not reachable from the production browser module graph. The active scene performs
-its geometry intersections, transforms and lighting in CUDA.
+## Platform and validation
 
-## Differences and limits
+This targets the WebCuda CUDA subset, including graphics texture and derivative intrinsics added to the vendored compiler. It is not a verified nvcc application. The vendored base is CUDA WebShader revision `f0f3699b498cfe6fe5419e072a4f4e2faa63b781`; local graphics extensions are included.
 
-This is not feature-for-feature numerical or visual parity with the upstream WebGL renderer:
+Use a WebGPU browser on localhost or HTTPS, with hardware acceleration. The graphics path needs float32 texture filtering and blending. Native driver shader compilation is substantial and can take several minutes during startup; the loading screen stays visible while compilation and the original warmup complete.
 
-- Original FFT resolution, wave-front interpolation, event continuation, run-up grid,
-  stochastic foam and optical calibration have changed. The opening event times and
-  shape table are retained, but the full upstream peel and transport formulas are not.
-- The CUDA height-field renderer and separate analytic curling sheet replace mesh
-  tessellation and the original ballistic lip ribbons. Very grazing rays can lose detail.
-- The original seafront and palm meshes are retained; the far 4 km city extensions and
-  mountain panorama are not included in the converted BVH. Navigation is bounded to
-  x=[−145,145], z=[−105,30]. Water outside the simulated region is an analytic continuation.
-- Underwater absorption, underside reflection, caustics and air particles are implemented;
-  the original volumetric plume, contact-light pass, temporal exposure adaptation and
-  material-specific shadow maps are not reproduced.
-- GPU texture filtering and edge filtering reduce aliasing but do not provide the original
-  renderer's multisample coverage or temporal stability. Very thin palm leaflets can shimmer.
-- Physics is a graphics approximation, not an engineering fluid model. Performance and
-  device coverage beyond the recorded local browser test are not certified.
-
-The upstream source remains in place to make further parity work traceable. Its tests
-exercise that reference implementation; the separate WebCuda browser suite is the
-evidence for the new GPU path.
-
-## Verification
-
-`npm test` includes source-graph isolation, manifest hashes, binding/workgroup budgets,
-BVH integrity, and the inherited 79 regression tests. `npm run test:webcuda:dist` uses a
-real WebGPU browser against the production build and saves a machine-readable report.
-It checks compiler/device validation, shallow-water finiteness/positivity, the resting-lake
-invariant, movement, unaligned row pitch, and 30 simulated seconds of driven waves.
-
-Optional test API: `__seek(seconds)`, `__advance(seconds)`, `__draw()`, `__setCamera(position,angles)`,
-`__diag()` and `__grab()`. Seek/reset operations are serialized with frame submission.
-Angles use yaw=0 toward −z, positive yaw toward +x, and positive pitch upward.
+Numerical GPU comparisons run original GLSL and CUDA on identical inputs and read back results. They cover full FFT chains, repeated flux steps, auxiliary swash passes, breaker profiles and lip geometry. Full browser tests exercise the actual integrated renderer. See `FAITHFUL-CUDA.md` for test commands and tolerances. Passing these checks does not assert bitwise image equality across different GPU drivers.

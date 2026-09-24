@@ -1,4 +1,0 @@
-Derived from ShoreBreak Seafront.js and the bundled Ashore / Jellys date palms.
-Original code and geometry: Christopher Canavan and credited contributors.
-MIT; see LICENSE, THIRD_PARTY_NOTICES.md and public/assets/palms-r6/CREDITS.txt.
-This file is an offline BVH conversion, not a new third-party asset.

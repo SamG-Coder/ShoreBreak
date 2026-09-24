@@ -16,8 +16,9 @@ for(const p of passes)for(const f of p.fields)if(!(f.name in values))throw Error
 const server=await createServer({logLevel:'error',server:{port:0}});await server.listen();const browser=await chromium.launch({executablePath:'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe',headless:true,args:['--enable-unsafe-webgpu']});
 try{
  const page=await browser.newPage();page.on('console',m=>console.log(m.text()));await page.goto(`http://localhost:${server.httpServer.address().port}/.qa/faithful/swash-passes.json`);
- const report=await page.evaluate(async({passes,artifacts,values,events,wave,lookup})=>{
+ const report=await page.evaluate(async({passes,artifacts,values,events,wave,lookup,graphics})=>{
   const {GpuRuntime}=await import('/vendor/cuda-webshader/runtime/runtime.js'),{OriginalShader,compare}=await import('/tools/faithful-gpu-harness.js');const rt=await GpuRuntime.create();
+  const T=graphics?await import('/node_modules/three/src/Three.Core.js'):null,{FullscreenPass,makeShader}=graphics?await import('/src/core/gpu.js'):{},renderer=graphics?await(await import('/src/webcuda/renderer.js')).WebCudaRenderer.create():null;
   function pack(fields){let offset=0,maxAlign=4;const layout=fields.map(({type,name})=>{const n=type.includes('vec')?+type.slice(-1):1,a=n===1?4:n===2?8:16;maxAlign=Math.max(maxAlign,a);offset=Math.ceil(offset/a)*a;const f={type,name,offset,n};offset+=n*4;return f;});const bytes=new Uint8Array(Math.max(4,Math.ceil(offset/maxAlign)*maxAlign)),dv=new DataView(bytes.buffer);for(const f of layout){const vs=Array.isArray(values[f.name])?values[f.name]:[values[f.name]];vs.forEach((v,j)=>dv[f.type==='int'?'setInt32':'setFloat32'](f.offset+j*4,v,true));}return bytes;}
   const eventsBuf=rt.createBuffer(new Float32Array(events)),lookupBuf=rt.createBuffer(new Float32Array(lookup)),uniforms=rt.createBuffer(pack(wave.fields));
   const n=96*64,empty=new Float32Array(n*4),textures={};for(const name of new Set(passes.flatMap(p=>p.textures)))textures[name]={data:empty,width:96,height:64,linear:true};
@@ -33,6 +34,12 @@ try{
    const u={};for(const {name,type} of [...wave.fields,...p.fields])u[name]={type:type==='int'?'uniform1i':type==='float'?'uniform1f':`uniform${type.slice(-1)}${type.startsWith('i')?'iv':'fv'}`,value:values[name]};for(let j=0;j<7;j++)u['uEvt'+'ABCDEFG'[j]+'[0]']={type:'uniform4fv',value:events.slice(j*24,(j+1)*24)};
    samplers.uWaterLookup=textures.uWaterLookup;const expected=oracle.run(samplers,u);
    for(let i=0;i<p.outputs;i++)report.push({pass:p.entry,output:i,...compare(actual.subarray(i*w*h*4,(i+1)*w*h*4),expected[i],2e-4,2e-4)});
+   if(graphics){
+    const uniforms=Object.fromEntries(Object.entries(values).map(([k,v])=>[k,{value:v}]));for(let j=0;j<7;j++)uniforms['uEvt'+'ABCDEFG'[j]]={value:events.slice(j*24,(j+1)*24)};
+    for(const [name,t]of Object.entries(samplers)){const texture=new T.DataTexture(t.data,t.width,t.height,T.RGBAFormat,T.FloatType);texture.needsUpdate=true;texture.minFilter=texture.magFilter=t.linear?T.LinearFilter:T.NearestFilter;uniforms[name]={value:texture};}
+    const pass=new FullscreenPass(makeShader(p.original,uniforms)),target=new T.WebGLRenderTarget(w,h,{count:p.outputs,type:T.FloatType,depthBuffer:false});pass.render(renderer,target);await renderer.idle();
+    for(let i=0;i<p.outputs;i++){const native=new Float32Array(w*h*4);await renderer.readRenderTargetPixelsAsync(target,0,0,w,h,native,i);report.push({pass:p.entry,backend:'CUDA graphics',output:i,...compare(native,expected[i],2e-4,2e-4)});}
+   }
    const tex=(data)=>({data,width:w,height:h,linear:true});
    if(p.entry==='originalBedInit')textures.uBed=tex(expected[0]);
    if(p.entry==='originalStateInit'){const state=expected[0].slice();for(let z=0;z<h;z++)for(let x=0;x<w;x++){const i=(z*w+x)*4,depth=Math.max(0,state[i]-textures.uBed.data[i]+.04*Math.exp(-((x-40)**2+(z-20)**2)/150));state[i]=textures.uBed.data[i]+depth;state[i+1]=depth*.6*Math.sin(x*.2);state[i+2]=depth*.5*Math.cos(z*.13);}textures.uState=tex(state);textures.uSrc=tex(state);}
@@ -42,6 +49,6 @@ try{
    for(const b of allocated)rt.destroyBuffer(b);
   }
   return report;
- },{passes,artifacts,values,events,wave,lookup:Array.from(travel.texture.image.data)});
- await writeFile('.qa/faithful/swash-parity.json',JSON.stringify(report,null,2));console.log(JSON.stringify(report,null,2));if(report.some(r=>r.failures))process.exitCode=1;
+ },{passes,artifacts,values,events,wave,lookup:Array.from(travel.texture.image.data),graphics:process.argv.includes('--graphics')});
+ await writeFile('.qa/faithful/'+(process.argv.includes('--graphics')?'graphics-swash-parity':'swash-parity')+'.json',JSON.stringify(report,null,2));console.log(JSON.stringify(report,null,2));if(report.some(r=>r.failures))process.exitCode=1;
 }finally{await browser.close();await server.close();}

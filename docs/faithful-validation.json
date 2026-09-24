@@ -1,12 +1,27 @@
 {
   "source": "ShoreBreak.cu",
-  "sourceSha256": "caeb2022ece54d26c31d64e74651b072071649d4036654d0dbf6012937b99544",
-  "kernelCount": 19,
+  "sourceSha256": "0a16accf6b947ba56a34b98d8fdde76746de9ac38c66d581584a8ef32bebd7a0",
+  "date": "2026-09-24",
+  "upstream": "11c8c05",
+  "kernelCount": 21,
+  "graphicsPrograms": 93,
   "adapter": {
     "vendor": "nvidia",
     "architecture": "blackwell"
   },
-  "scope": "Calculation comparisons only. No complete renderer integration or visual parity claim.",
+  "scope": "Original calculations and integrated WebCuda graphics; both production browser modes. Floating-point tolerance comparisons and visual review, not bitwise image equality.",
+  "unitTests": {
+    "passed": 84,
+    "failed": 0
+  },
+  "assetChecks": {
+    "passed": 40,
+    "failed": 0
+  },
+  "graphicsValidation": {
+    "programs": 93,
+    "errors": []
+  },
   "reports": {
     "parity": {
       "count": 4096,
@@ -1066,6 +1081,1768 @@
           "expected": -0.0285567045211792
         }
       }
+    ],
+    "graphics-simulation-parity": [
+      {
+        "pass": "spectrum 0",
+        "values": 786432,
+        "maxAbsolute": 6.565824151039124e-8,
+        "failures": 0,
+        "worst": {
+          "i": 17414,
+          "actual": 0.004589555319398642,
+          "expected": 0.004589489661157131
+        }
+      },
+      {
+        "pass": "spectrum 1",
+        "values": 786432,
+        "maxAbsolute": 2.837623469531536e-9,
+        "failures": 0,
+        "worst": {
+          "i": 17412,
+          "actual": -0.00020015363406855613,
+          "expected": -0.0002001507964450866
+        }
+      },
+      {
+        "pass": "FFT 1/2/0",
+        "values": 786432,
+        "maxAbsolute": 6.565824151039124e-8,
+        "failures": 0,
+        "worst": {
+          "i": 17418,
+          "actual": 0.0045877667143940926,
+          "expected": 0.004587701056152582
+        }
+      },
+      {
+        "pass": "FFT 1/2/1",
+        "values": 786432,
+        "maxAbsolute": 2.837623469531536e-9,
+        "failures": 0,
+        "worst": {
+          "i": 17416,
+          "actual": -0.00020015056361444294,
+          "expected": -0.0002001477259909734
+        }
+      },
+      {
+        "pass": "FFT 1/4/0",
+        "values": 786432,
+        "maxAbsolute": 6.612390279769897e-8,
+        "failures": 0,
+        "worst": {
+          "i": 17434,
+          "actual": 0.004636423662304878,
+          "expected": 0.0046363575384020805
+        }
+      },
+      {
+        "pass": "FFT 1/4/1",
+        "values": 786432,
+        "maxAbsolute": 2.837623469531536e-9,
+        "failures": 0,
+        "worst": {
+          "i": 17424,
+          "actual": -0.00019998411880806088,
+          "expected": -0.00019998128118459135
+        }
+      },
+      {
+        "pass": "FFT 1/8/0",
+        "values": 786432,
+        "maxAbsolute": 6.658956408500671e-8,
+        "failures": 0,
+        "worst": {
+          "i": 774123,
+          "actual": -0.0051788645796477795,
+          "expected": -0.0051787979900836945
+        }
+      },
+      {
+        "pass": "FFT 1/8/1",
+        "values": 786432,
+        "maxAbsolute": 2.837623469531536e-9,
+        "failures": 0,
+        "worst": {
+          "i": 17440,
+          "actual": -0.0001984035043278709,
+          "expected": -0.00019840066670440137
+        }
+      },
+      {
+        "pass": "FFT 1/16/0",
+        "values": 786432,
+        "maxAbsolute": 6.80884113535285e-8,
+        "failures": 0,
+        "worst": {
+          "i": 774142,
+          "actual": -0.00016865257930476218,
+          "expected": -0.0001687206677161157
+        }
+      },
+      {
+        "pass": "FFT 1/16/1",
+        "values": 786432,
+        "maxAbsolute": 2.8558133635669947e-9,
+        "failures": 0,
+        "worst": {
+          "i": 774108,
+          "actual": 0.000007966642442625016,
+          "expected": 0.000007963786629261449
+        }
+      },
+      {
+        "pass": "FFT 1/32/0",
+        "values": 786432,
+        "maxAbsolute": 9.16188582777977e-8,
+        "failures": 0,
+        "worst": {
+          "i": 678107,
+          "actual": 0.00031971896532922983,
+          "expected": 0.00031962734647095203
+        }
+      },
+      {
+        "pass": "FFT 1/32/1",
+        "values": 786432,
+        "maxAbsolute": 3.026798367500305e-9,
+        "failures": 0,
+        "worst": {
+          "i": 774076,
+          "actual": 0.00006812372885178775,
+          "expected": 0.00006812070205342025
+        }
+      },
+      {
+        "pass": "FFT 1/64/0",
+        "values": 786432,
+        "maxAbsolute": 1.0422081686556339e-7,
+        "failures": 0,
+        "worst": {
+          "i": 678239,
+          "actual": -0.00013459398178383708,
+          "expected": -0.00013469820260070264
+        }
+      },
+      {
+        "pass": "FFT 1/64/1",
+        "values": 786432,
+        "maxAbsolute": 3.0631781555712223e-9,
+        "failures": 0,
+        "worst": {
+          "i": 773949,
+          "actual": -0.00008964881271822378,
+          "expected": -0.00008965187589637935
+        }
+      },
+      {
+        "pass": "FFT 1/128/0",
+        "values": 786432,
+        "maxAbsolute": 1.2991949915885925e-7,
+        "failures": 0,
+        "worst": {
+          "i": 755053,
+          "actual": -0.0015913411043584347,
+          "expected": -0.0015912111848592758
+        }
+      },
+      {
+        "pass": "FFT 1/128/1",
+        "values": 786432,
+        "maxAbsolute": 4.0745362639427185e-9,
+        "failures": 0,
+        "worst": {
+          "i": 769821,
+          "actual": 0.0012237203773111105,
+          "expected": 0.0012237163027748466
+        }
+      },
+      {
+        "pass": "FFT 1/256/0",
+        "values": 786432,
+        "maxAbsolute": 1.862645149230957e-7,
+        "failures": 0,
+        "worst": {
+          "i": 112959,
+          "actual": -0.007424299605190754,
+          "expected": -0.007424113340675831
+        }
+      },
+      {
+        "pass": "FFT 1/256/1",
+        "values": 786432,
+        "maxAbsolute": 5.122274160385132e-9,
+        "failures": 0,
+        "worst": {
+          "i": 16625,
+          "actual": 0.004236246459186077,
+          "expected": 0.004236241336911917
+        }
+      },
+      {
+        "pass": "FFT 0/2/0",
+        "values": 786432,
+        "maxAbsolute": 2.6740599423646927e-7,
+        "failures": 0,
+        "worst": {
+          "i": 395302,
+          "actual": 0.0016972478479146957,
+          "expected": 0.0016975152539089322
+        }
+      },
+      {
+        "pass": "FFT 0/2/1",
+        "values": 786432,
+        "maxAbsolute": 5.122274160385132e-9,
+        "failures": 0,
+        "worst": {
+          "i": 31985,
+          "actual": 0.004236246459186077,
+          "expected": 0.004236241336911917
+        }
+      },
+      {
+        "pass": "FFT 0/4/0",
+        "values": 786432,
+        "maxAbsolute": 2.675224095582962e-7,
+        "failures": 0,
+        "worst": {
+          "i": 2086,
+          "actual": 0.0016971109434962273,
+          "expected": 0.0016973784659057856
+        }
+      },
+      {
+        "pass": "FFT 0/4/1",
+        "values": 786432,
+        "maxAbsolute": 5.122274160385132e-9,
+        "failures": 0,
+        "worst": {
+          "i": 62705,
+          "actual": 0.004236246459186077,
+          "expected": 0.004236241336911917
+        }
+      },
+      {
+        "pass": "FFT 0/8/0",
+        "values": 786432,
+        "maxAbsolute": 4.032626748085022e-7,
+        "failures": 0,
+        "worst": {
+          "i": 2086,
+          "actual": -0.010766762308776379,
+          "expected": -0.01076635904610157
+        }
+      },
+      {
+        "pass": "FFT 0/8/1",
+        "values": 786432,
+        "maxAbsolute": 5.122274160385132e-9,
+        "failures": 0,
+        "worst": {
+          "i": 124145,
+          "actual": 0.004236246459186077,
+          "expected": 0.004236241336911917
+        }
+      },
+      {
+        "pass": "FFT 0/16/0",
+        "values": 786432,
+        "maxAbsolute": 5.364418029785156e-7,
+        "failures": 0,
+        "worst": {
+          "i": 29902,
+          "actual": 0.016141362488269806,
+          "expected": 0.016140826046466827
+        }
+      },
+      {
+        "pass": "FFT 0/16/1",
+        "values": 786432,
+        "maxAbsolute": 6.05359673500061e-9,
+        "failures": 0,
+        "worst": {
+          "i": 283889,
+          "actual": 0.004754497203975916,
+          "expected": 0.004754491150379181
+        }
+      },
+      {
+        "pass": "FFT 0/32/0",
+        "values": 786432,
+        "maxAbsolute": 8.66129994392395e-7,
+        "failures": 0,
+        "worst": {
+          "i": 61078,
+          "actual": 0.014983439818024635,
+          "expected": 0.014982573688030243
+        }
+      },
+      {
+        "pass": "FFT 0/32/1",
+        "values": 786432,
+        "maxAbsolute": 9.313225746154785e-9,
+        "failures": 0,
+        "worst": {
+          "i": 397672,
+          "actual": 0.007522031664848328,
+          "expected": 0.007522040978074074
+        }
+      },
+      {
+        "pass": "FFT 0/64/0",
+        "values": 786432,
+        "maxAbsolute": 0.0000012649688869714737,
+        "failures": 0,
+        "worst": {
+          "i": 410646,
+          "actual": 0.0034419982694089413,
+          "expected": 0.0034432632382959127
+        }
+      },
+      {
+        "pass": "FFT 0/64/1",
+        "values": 786432,
+        "maxAbsolute": 1.1175870895385742e-8,
+        "failures": 0,
+        "worst": {
+          "i": 4460,
+          "actual": 0.010846713557839394,
+          "expected": 0.010846724733710289
+        }
+      },
+      {
+        "pass": "FFT 0/128/0",
+        "values": 786432,
+        "maxAbsolute": 0.000001691281795501709,
+        "failures": 0,
+        "worst": {
+          "i": 192806,
+          "actual": -0.03134291619062424,
+          "expected": -0.031341224908828735
+        }
+      },
+      {
+        "pass": "FFT 0/128/1",
+        "values": 786432,
+        "maxAbsolute": 1.7695128917694092e-8,
+        "failures": 0,
+        "worst": {
+          "i": 133904,
+          "actual": 0.012326858006417751,
+          "expected": 0.012326840311288834
+        }
+      },
+      {
+        "pass": "FFT 0/256/0",
+        "values": 786432,
+        "maxAbsolute": 0.0000025033950805664062,
+        "failures": 0,
+        "worst": {
+          "i": 309498,
+          "actual": 0.17985081672668457,
+          "expected": 0.17985332012176514
+        }
+      },
+      {
+        "pass": "FFT 0/256/1",
+        "values": 786432,
+        "maxAbsolute": 2.7939677238464355e-8,
+        "failures": 0,
+        "worst": {
+          "i": 532748,
+          "actual": -0.02041800692677498,
+          "expected": -0.02041797898709774
+        }
+      },
+      {
+        "pass": "compose 0/0",
+        "values": 262144,
+        "maxAbsolute": 1.0244548320770264e-8,
+        "failures": 0,
+        "worst": {
+          "i": 225405,
+          "actual": -0.008993107825517654,
+          "expected": -0.008993118070065975
+        }
+      },
+      {
+        "pass": "compose 0/1",
+        "values": 262144,
+        "maxAbsolute": 1.6763806343078613e-8,
+        "failures": 0,
+        "worst": {
+          "i": 27277,
+          "actual": -0.024648670107126236,
+          "expected": -0.02464868687093258
+        }
+      },
+      {
+        "pass": "compose 1/0",
+        "values": 262144,
+        "maxAbsolute": 5.587935447692871e-8,
+        "failures": 0,
+        "worst": {
+          "i": 12025,
+          "actual": -0.006061243824660778,
+          "expected": -0.006061187945306301
+        }
+      },
+      {
+        "pass": "compose 1/1",
+        "values": 262144,
+        "maxAbsolute": 2.7567148208618164e-7,
+        "failures": 0,
+        "worst": {
+          "i": 177421,
+          "actual": 0.07501756399869919,
+          "expected": 0.0750172883272171
+        }
+      },
+      {
+        "pass": "compose 2/0",
+        "values": 262144,
+        "maxAbsolute": 1.1597876437008381e-7,
+        "failures": 0,
+        "worst": {
+          "i": 58365,
+          "actual": 0.00016968161799013615,
+          "expected": 0.00016956563922576606
+        }
+      },
+      {
+        "pass": "compose 2/1",
+        "values": 262144,
+        "maxAbsolute": 0.0000025033950805664062,
+        "failures": 0,
+        "worst": {
+          "i": 102649,
+          "actual": 0.17985081672668457,
+          "expected": 0.17985332012176514
+        }
+      },
+      {
+        "pass": "KP 1",
+        "values": 24576,
+        "maxAbsolute": 1.4901161193847656e-8,
+        "failures": 0,
+        "worst": {
+          "i": 2173,
+          "actual": 0.09223703294992447,
+          "expected": 0.09223701804876328
+        }
+      },
+      {
+        "pass": "KP 6",
+        "values": 24576,
+        "maxAbsolute": 2.2351741790771484e-8,
+        "failures": 0,
+        "worst": {
+          "i": 310,
+          "actual": 0.09329739958047867,
+          "expected": 0.09329737722873688
+        }
+      },
+      {
+        "pass": "KP 36",
+        "values": 24576,
+        "maxAbsolute": 3.725290298461914e-8,
+        "failures": 0,
+        "worst": {
+          "i": 74,
+          "actual": 0.09554680436849594,
+          "expected": 0.09554684162139893
+        }
+      }
+    ],
+    "graphics-swash-parity": [
+      {
+        "pass": "originalBedInit",
+        "output": 0,
+        "values": 24576,
+        "maxAbsolute": 0.000003341585397720337,
+        "failures": 0,
+        "worst": {
+          "i": 13450,
+          "actual": -0.04041077941656113,
+          "expected": -0.040407437831163406
+        }
+      },
+      {
+        "pass": "originalBedInit",
+        "backend": "CUDA graphics",
+        "output": 0,
+        "values": 24576,
+        "maxAbsolute": 0.00000286102294921875,
+        "failures": 0,
+        "worst": {
+          "i": 5394,
+          "actual": -0.19740426540374756,
+          "expected": -0.19740140438079834
+        }
+      },
+      {
+        "pass": "originalStateInit",
+        "output": 0,
+        "values": 24576,
+        "maxAbsolute": 0,
+        "failures": 0,
+        "worst": null
+      },
+      {
+        "pass": "originalStateInit",
+        "backend": "CUDA graphics",
+        "output": 0,
+        "values": 24576,
+        "maxAbsolute": 0,
+        "failures": 0,
+        "worst": null
+      },
+      {
+        "pass": "originalSources",
+        "output": 0,
+        "values": 24576,
+        "maxAbsolute": 2.2351741790771484e-8,
+        "failures": 0,
+        "worst": {
+          "i": 2026,
+          "actual": 0.12055807560682297,
+          "expected": 0.12055809795856476
+        }
+      },
+      {
+        "pass": "originalSources",
+        "backend": "CUDA graphics",
+        "output": 0,
+        "values": 24576,
+        "maxAbsolute": 2.9802322387695312e-8,
+        "failures": 0,
+        "worst": {
+          "i": 198,
+          "actual": 0.19947582483291626,
+          "expected": 0.19947585463523865
+        }
+      },
+      {
+        "pass": "originalFoam",
+        "output": 0,
+        "values": 24576,
+        "maxAbsolute": 2.2724270820617676e-7,
+        "failures": 0,
+        "worst": {
+          "i": 2264,
+          "actual": 0.03823003172874451,
+          "expected": 0.03823025897145271
+        }
+      },
+      {
+        "pass": "originalFoam",
+        "output": 1,
+        "values": 24576,
+        "maxAbsolute": 9.313225746154785e-10,
+        "failures": 0,
+        "worst": {
+          "i": 1108,
+          "actual": 0.004806987475603819,
+          "expected": 0.0048069884069263935
+        }
+      },
+      {
+        "pass": "originalFoam",
+        "backend": "CUDA graphics",
+        "output": 0,
+        "values": 24576,
+        "maxAbsolute": 2.2724270820617676e-7,
+        "failures": 0,
+        "worst": {
+          "i": 2264,
+          "actual": 0.03823003172874451,
+          "expected": 0.03823025897145271
+        }
+      },
+      {
+        "pass": "originalFoam",
+        "backend": "CUDA graphics",
+        "output": 1,
+        "values": 24576,
+        "maxAbsolute": 9.313225746154785e-10,
+        "failures": 0,
+        "worst": {
+          "i": 1108,
+          "actual": 0.004806987475603819,
+          "expected": 0.0048069884069263935
+        }
+      },
+      {
+        "pass": "originalFoamView",
+        "output": 0,
+        "values": 24576,
+        "maxAbsolute": 0,
+        "failures": 0,
+        "worst": null
+      },
+      {
+        "pass": "originalFoamView",
+        "backend": "CUDA graphics",
+        "output": 0,
+        "values": 24576,
+        "maxAbsolute": 0,
+        "failures": 0,
+        "worst": null
+      },
+      {
+        "pass": "originalWet",
+        "output": 0,
+        "values": 24576,
+        "maxAbsolute": 1.1920928955078125e-7,
+        "failures": 0,
+        "worst": {
+          "i": 16568,
+          "actual": 0.9072872996330261,
+          "expected": 0.9072874188423157
+        }
+      },
+      {
+        "pass": "originalWet",
+        "backend": "CUDA graphics",
+        "output": 0,
+        "values": 24576,
+        "maxAbsolute": 1.5929799701552838e-9,
+        "failures": 0,
+        "worst": {
+          "i": 19082,
+          "actual": 0.0000046749096327403095,
+          "expected": 0.000004676502612710465
+        }
+      },
+      {
+        "pass": "originalWetInit",
+        "output": 0,
+        "values": 24576,
+        "maxAbsolute": 0.000003824010491371155,
+        "failures": 0,
+        "worst": {
+          "i": 19082,
+          "actual": 0.011222201399505138,
+          "expected": 0.01122602540999651
+        }
+      },
+      {
+        "pass": "originalWetInit",
+        "backend": "CUDA graphics",
+        "output": 0,
+        "values": 24576,
+        "maxAbsolute": 0.000003824010491371155,
+        "failures": 0,
+        "worst": {
+          "i": 19082,
+          "actual": 0.011222201399505138,
+          "expected": 0.01122602540999651
+        }
+      },
+      {
+        "pass": "originalHeight",
+        "output": 0,
+        "values": 24576,
+        "maxAbsolute": 2.60770320892334e-8,
+        "failures": 0,
+        "worst": {
+          "i": 3808,
+          "actual": -0.05249207094311714,
+          "expected": -0.05249209702014923
+        }
+      },
+      {
+        "pass": "originalHeight",
+        "backend": "CUDA graphics",
+        "output": 0,
+        "values": 24576,
+        "maxAbsolute": 2.2351741790771484e-8,
+        "failures": 0,
+        "worst": {
+          "i": 580,
+          "actual": -0.0618429072201252,
+          "expected": -0.06184288486838341
+        }
+      },
+      {
+        "pass": "originalView",
+        "output": 0,
+        "values": 24576,
+        "maxAbsolute": 0.000003824010491371155,
+        "failures": 0,
+        "worst": {
+          "i": 19083,
+          "actual": 0.011223822832107544,
+          "expected": 0.011227646842598915
+        }
+      },
+      {
+        "pass": "originalView",
+        "backend": "CUDA graphics",
+        "output": 0,
+        "values": 24576,
+        "maxAbsolute": 0.000003824010491371155,
+        "failures": 0,
+        "worst": {
+          "i": 19083,
+          "actual": 0.011223822832107544,
+          "expected": 0.011227646842598915
+        }
+      },
+      {
+        "pass": "originalShift",
+        "output": 0,
+        "values": 24576,
+        "maxAbsolute": 6.402842700481415e-10,
+        "failures": 0,
+        "worst": {
+          "i": 10364,
+          "actual": 0.0007345702033489943,
+          "expected": 0.0007345695630647242
+        }
+      },
+      {
+        "pass": "originalShift",
+        "backend": "CUDA graphics",
+        "output": 0,
+        "values": 24576,
+        "maxAbsolute": 2.3283064365386963e-10,
+        "failures": 0,
+        "worst": {
+          "i": 11516,
+          "actual": 0.002485270844772458,
+          "expected": 0.0024852706119418144
+        }
+      },
+      {
+        "pass": "originalShiftFoam",
+        "output": 0,
+        "values": 24576,
+        "maxAbsolute": 0,
+        "failures": 0,
+        "worst": null
+      },
+      {
+        "pass": "originalShiftFoam",
+        "output": 1,
+        "values": 24576,
+        "maxAbsolute": 0,
+        "failures": 0,
+        "worst": null
+      },
+      {
+        "pass": "originalShiftFoam",
+        "backend": "CUDA graphics",
+        "output": 0,
+        "values": 24576,
+        "maxAbsolute": 0,
+        "failures": 0,
+        "worst": null
+      },
+      {
+        "pass": "originalShiftFoam",
+        "backend": "CUDA graphics",
+        "output": 1,
+        "values": 24576,
+        "maxAbsolute": 0,
+        "failures": 0,
+        "worst": null
+      },
+      {
+        "pass": "originalFarParam",
+        "output": 0,
+        "values": 4608,
+        "maxAbsolute": 0.00003838539123535156,
+        "failures": 0,
+        "worst": {
+          "i": 2309,
+          "actual": 2.54715633392334,
+          "expected": 2.5471179485321045
+        }
+      },
+      {
+        "pass": "originalFarParam",
+        "backend": "CUDA graphics",
+        "output": 0,
+        "values": 4608,
+        "maxAbsolute": 0.000018596649169921875,
+        "failures": 0,
+        "worst": {
+          "i": 785,
+          "actual": 2.129026412963867,
+          "expected": 2.1290078163146973
+        }
+      },
+      {
+        "pass": "originalFarModel",
+        "output": 0,
+        "values": 24576,
+        "maxAbsolute": 0.000003874301910400391,
+        "failures": 0,
+        "worst": {
+          "i": 15500,
+          "actual": 0.7583637237548828,
+          "expected": 0.7583598494529724
+        }
+      },
+      {
+        "pass": "originalFarModel",
+        "output": 1,
+        "values": 24576,
+        "maxAbsolute": 0.00004661083221435547,
+        "failures": 0,
+        "worst": {
+          "i": 10321,
+          "actual": 1.407799243927002,
+          "expected": 1.4078458547592163
+        }
+      },
+      {
+        "pass": "originalFarModel",
+        "output": 2,
+        "values": 24576,
+        "maxAbsolute": 2.384185791015625e-7,
+        "failures": 0,
+        "worst": {
+          "i": 222,
+          "actual": -0.0285569429397583,
+          "expected": -0.0285567045211792
+        }
+      },
+      {
+        "pass": "originalFarModel",
+        "backend": "CUDA graphics",
+        "output": 0,
+        "values": 24576,
+        "maxAbsolute": 0.00000286102294921875,
+        "failures": 0,
+        "worst": {
+          "i": 17664,
+          "actual": 0.7104284763336182,
+          "expected": 0.7104313373565674
+        }
+      },
+      {
+        "pass": "originalFarModel",
+        "backend": "CUDA graphics",
+        "output": 1,
+        "values": 24576,
+        "maxAbsolute": 0.000041484832763671875,
+        "failures": 0,
+        "worst": {
+          "i": 7309,
+          "actual": 1.1612061262130737,
+          "expected": 1.1612476110458374
+        }
+      },
+      {
+        "pass": "originalFarModel",
+        "backend": "CUDA graphics",
+        "output": 2,
+        "values": 24576,
+        "maxAbsolute": 2.384185791015625e-7,
+        "failures": 0,
+        "worst": {
+          "i": 222,
+          "actual": -0.0285569429397583,
+          "expected": -0.0285567045211792
+        }
+      }
+    ],
+    "graphics-material-parity": [
+      {
+        "pass": "original pebble bake",
+        "output": 0,
+        "values": 65536,
+        "maxAbsolute": 0.000005245208740234375,
+        "failures": 0,
+        "worst": {
+          "i": 10552,
+          "actual": 1.4454407691955566,
+          "expected": 1.4454355239868164
+        }
+      },
+      {
+        "pass": "original pebble bake",
+        "output": 1,
+        "values": 65536,
+        "maxAbsolute": 0.000009104609489440918,
+        "failures": 0,
+        "worst": {
+          "i": 65481,
+          "actual": 0.11599771678447723,
+          "expected": 0.11598861217498779
+        }
+      }
     ]
+  },
+  "browsers": {
+    "explore": {
+      "state": {
+        "ready": true,
+        "status": "Welcome to the shore",
+        "programs": 65,
+        "errors": [],
+        "marks": [
+          [
+            "init",
+            216
+          ],
+          [
+            "swe",
+            323
+          ],
+          [
+            "pre-water",
+            324
+          ],
+          [
+            "lips",
+            438
+          ],
+          [
+            "beach",
+            512
+          ],
+          [
+            "coast-assets",
+            1121
+          ],
+          [
+            "sky",
+            1121
+          ],
+          [
+            "whitewater",
+            1130
+          ],
+          [
+            "precompiled",
+            119845
+          ],
+          [
+            "animated-frames-warmed",
+            121733
+          ],
+          [
+            "render-passes-warmed",
+            121733
+          ],
+          [
+            "ready",
+            129411
+          ]
+        ],
+        "webglCalls": []
+      },
+      "errors": [],
+      "gpuErrors": [],
+      "timings": {
+        "msRender": 19.760000002384185,
+        "msSim": 8.180000001192093,
+        "estimatedMsFrame": 36.12000000476837,
+        "timer": "queue-complete wall clock",
+        "W": 480,
+        "H": 320
+      },
+      "dist": true
+    },
+    "clip": {
+      "state": {
+        "ready": true,
+        "status": "Welcome to the shore",
+        "programs": 39,
+        "errors": [],
+        "marks": [
+          [
+            "init",
+            353
+          ],
+          [
+            "swe",
+            364
+          ],
+          [
+            "pre-water",
+            364
+          ],
+          [
+            "lips",
+            434
+          ],
+          [
+            "beach",
+            471
+          ],
+          [
+            "sky",
+            472
+          ],
+          [
+            "whitewater",
+            482
+          ],
+          [
+            "precompiled",
+            30155
+          ],
+          [
+            "animated-frames-warmed",
+            31422
+          ],
+          [
+            "render-passes-warmed",
+            31422
+          ],
+          [
+            "ready",
+            33997
+          ]
+        ],
+        "webglCalls": []
+      },
+      "errors": [],
+      "gpuErrors": [],
+      "timings": {
+        "msRender": 14.080000001192094,
+        "msSim": 4.780000001192093,
+        "estimatedMsFrame": 23.64000000357628,
+        "timer": "queue-complete wall clock",
+        "W": 480,
+        "H": 320
+      },
+      "dist": true
+    }
+  },
+  "states": {
+    "explore": {
+      "maxH": 1.1240462074056268,
+      "maxV": 4.4382705868906545,
+      "wetBeach": 35579,
+      "nan": 0,
+      "mass": 96.21072307551596,
+      "prof": [
+        [
+          -5.99,
+          -1.115,
+          1.1187,
+          -0.01
+        ],
+        [
+          -5.75,
+          -1.086,
+          1.0957,
+          -0.03
+        ],
+        [
+          -5.51,
+          -1.058,
+          1.0732,
+          -0.05
+        ],
+        [
+          -5.27,
+          -1.029,
+          1.0465,
+          -0.05
+        ],
+        [
+          -5.03,
+          -1.001,
+          1.017,
+          -0.05
+        ],
+        [
+          -4.79,
+          -0.972,
+          0.9898,
+          -0.05
+        ],
+        [
+          -4.55,
+          -0.944,
+          0.9619,
+          -0.06
+        ],
+        [
+          -4.31,
+          -0.915,
+          0.9305,
+          -0.06
+        ],
+        [
+          -4.07,
+          -0.887,
+          0.9026,
+          -0.07
+        ],
+        [
+          -3.83,
+          -0.858,
+          0.8786,
+          -0.08
+        ],
+        [
+          -3.59,
+          -0.829,
+          0.8616,
+          -0.1
+        ],
+        [
+          -3.36,
+          -0.8,
+          0.8452,
+          -0.13
+        ],
+        [
+          -3.12,
+          -0.771,
+          0.8239,
+          -0.16
+        ],
+        [
+          -2.88,
+          -0.74,
+          0.8005,
+          -0.18
+        ],
+        [
+          -2.64,
+          -0.705,
+          0.7717,
+          -0.2
+        ],
+        [
+          -2.4,
+          -0.661,
+          0.7345,
+          -0.21
+        ],
+        [
+          -2.16,
+          -0.604,
+          0.7033,
+          -0.16
+        ],
+        [
+          -1.92,
+          -0.534,
+          0.6783,
+          0
+        ],
+        [
+          -1.68,
+          -0.446,
+          0.6443,
+          0.25
+        ],
+        [
+          -1.44,
+          -0.344,
+          0.5899,
+          0.51
+        ],
+        [
+          -1.2,
+          -0.245,
+          0.5094,
+          0.73
+        ],
+        [
+          -0.97,
+          -0.166,
+          0.411,
+          0.8
+        ],
+        [
+          -0.73,
+          -0.102,
+          0.144,
+          -0.42
+        ],
+        [
+          -0.49,
+          -0.054,
+          0.1111,
+          -0.59
+        ],
+        [
+          -0.25,
+          -0.016,
+          0.1231,
+          -0.52
+        ],
+        [
+          -0.01,
+          0.013,
+          0.1439,
+          -0.32
+        ],
+        [
+          0.23,
+          0.032,
+          0.1581,
+          0
+        ],
+        [
+          0.47,
+          0.061,
+          0.1663,
+          0.37
+        ],
+        [
+          0.71,
+          0.096,
+          0.1577,
+          0.56
+        ],
+        [
+          0.95,
+          0.131,
+          0.0442,
+          -0.4
+        ],
+        [
+          1.19,
+          0.163,
+          0.0318,
+          -0.32
+        ],
+        [
+          1.42,
+          0.193,
+          0.0159,
+          -0.22
+        ],
+        [
+          1.66,
+          0.222,
+          0.0008,
+          0.34
+        ],
+        [
+          1.9,
+          0.253,
+          0.0002,
+          0.24
+        ],
+        [
+          2.14,
+          0.287,
+          0,
+          0
+        ],
+        [
+          2.38,
+          0.322,
+          0,
+          0
+        ],
+        [
+          2.62,
+          0.353,
+          0,
+          0
+        ],
+        [
+          2.86,
+          0.385,
+          0,
+          0
+        ],
+        [
+          3.1,
+          0.419,
+          0,
+          0
+        ],
+        [
+          3.34,
+          0.451,
+          0,
+          0
+        ],
+        [
+          3.58,
+          0.483,
+          0,
+          0
+        ],
+        [
+          3.81,
+          0.515,
+          0,
+          0
+        ],
+        [
+          4.05,
+          0.547,
+          0,
+          0
+        ],
+        [
+          4.29,
+          0.58,
+          0,
+          0
+        ],
+        [
+          4.53,
+          0.612,
+          0,
+          0
+        ],
+        [
+          4.77,
+          0.644,
+          0,
+          0
+        ],
+        [
+          5.01,
+          0.676,
+          0,
+          0
+        ],
+        [
+          5.25,
+          0.708,
+          0,
+          0
+        ],
+        [
+          5.49,
+          0.74,
+          0,
+          0
+        ],
+        [
+          5.73,
+          0.772,
+          0,
+          0
+        ],
+        [
+          5.97,
+          0.804,
+          0,
+          0
+        ],
+        [
+          6.21,
+          0.836,
+          0,
+          0
+        ],
+        [
+          6.44,
+          0.868,
+          0,
+          0
+        ],
+        [
+          6.68,
+          0.899,
+          0,
+          0
+        ],
+        [
+          6.92,
+          0.931,
+          0,
+          0
+        ],
+        [
+          7.16,
+          0.962,
+          0,
+          0
+        ],
+        [
+          7.4,
+          0.994,
+          0,
+          0
+        ],
+        [
+          7.64,
+          1.025,
+          0,
+          0
+        ],
+        [
+          7.88,
+          1.056,
+          0,
+          0
+        ],
+        [
+          8.12,
+          1.087,
+          0,
+          0
+        ],
+        [
+          8.36,
+          1.118,
+          0,
+          0
+        ],
+        [
+          8.6,
+          1.148,
+          0,
+          0
+        ],
+        [
+          8.83,
+          1.178,
+          0,
+          0
+        ],
+        [
+          9.07,
+          1.208,
+          0,
+          0
+        ],
+        [
+          9.31,
+          1.237,
+          0,
+          0
+        ],
+        [
+          9.55,
+          1.266,
+          0,
+          0
+        ],
+        [
+          9.79,
+          1.295,
+          0,
+          0
+        ],
+        [
+          10.03,
+          1.324,
+          0,
+          0
+        ],
+        [
+          10.27,
+          1.352,
+          0,
+          0
+        ],
+        [
+          10.51,
+          1.379,
+          0,
+          0
+        ],
+        [
+          10.75,
+          1.406,
+          0,
+          0
+        ],
+        [
+          10.99,
+          1.433,
+          0,
+          0
+        ],
+        [
+          11.22,
+          1.459,
+          0,
+          0
+        ],
+        [
+          11.46,
+          1.484,
+          0,
+          0
+        ],
+        [
+          11.7,
+          1.509,
+          0,
+          0
+        ],
+        [
+          11.94,
+          1.534,
+          0,
+          0
+        ],
+        [
+          12.18,
+          1.558,
+          0,
+          0
+        ]
+      ]
+    },
+    "clip": {
+      "maxH": 1.1196550326421857,
+      "maxV": 2.741218610320751,
+      "wetBeach": 10211,
+      "nan": 0,
+      "mass": 39.76665256188717,
+      "prof": [
+        [
+          -5.99,
+          -1.115,
+          1.119,
+          -0.01
+        ],
+        [
+          -5.75,
+          -1.086,
+          1.0962,
+          -0.03
+        ],
+        [
+          -5.51,
+          -1.058,
+          1.0753,
+          -0.05
+        ],
+        [
+          -5.27,
+          -1.029,
+          1.051,
+          -0.07
+        ],
+        [
+          -5.03,
+          -1.001,
+          1.0217,
+          -0.07
+        ],
+        [
+          -4.79,
+          -0.972,
+          0.9926,
+          -0.08
+        ],
+        [
+          -4.55,
+          -0.944,
+          0.9637,
+          -0.08
+        ],
+        [
+          -4.31,
+          -0.915,
+          0.9345,
+          -0.08
+        ],
+        [
+          -4.07,
+          -0.887,
+          0.9059,
+          -0.09
+        ],
+        [
+          -3.83,
+          -0.858,
+          0.876,
+          -0.09
+        ],
+        [
+          -3.59,
+          -0.829,
+          0.8465,
+          -0.1
+        ],
+        [
+          -3.36,
+          -0.8,
+          0.8169,
+          -0.11
+        ],
+        [
+          -3.12,
+          -0.771,
+          0.7869,
+          -0.11
+        ],
+        [
+          -2.88,
+          -0.74,
+          0.7556,
+          -0.11
+        ],
+        [
+          -2.64,
+          -0.705,
+          0.7205,
+          -0.12
+        ],
+        [
+          -2.4,
+          -0.661,
+          0.6752,
+          -0.14
+        ],
+        [
+          -2.16,
+          -0.604,
+          0.6172,
+          -0.16
+        ],
+        [
+          -1.92,
+          -0.534,
+          0.5518,
+          -0.15
+        ],
+        [
+          -1.68,
+          -0.463,
+          0.4949,
+          -0.08
+        ],
+        [
+          -1.44,
+          -0.4,
+          0.4348,
+          -0.05
+        ],
+        [
+          -1.2,
+          -0.334,
+          0.3506,
+          -0.26
+        ],
+        [
+          -0.97,
+          -0.254,
+          0.2542,
+          -0.54
+        ],
+        [
+          -0.73,
+          -0.176,
+          0.1632,
+          -0.82
+        ],
+        [
+          -0.49,
+          -0.11,
+          0.1252,
+          -0.71
+        ],
+        [
+          -0.25,
+          -0.058,
+          0.0453,
+          -1.26
+        ],
+        [
+          -0.01,
+          -0.015,
+          0.0391,
+          -1.16
+        ],
+        [
+          0.23,
+          0.031,
+          0.0366,
+          -1
+        ],
+        [
+          0.47,
+          0.066,
+          0.0368,
+          -0.84
+        ],
+        [
+          0.71,
+          0.098,
+          0.03,
+          -0.75
+        ],
+        [
+          0.95,
+          0.128,
+          0.0255,
+          -0.61
+        ],
+        [
+          1.19,
+          0.162,
+          0.0061,
+          -0.4
+        ],
+        [
+          1.42,
+          0.192,
+          0.0012,
+          -0.28
+        ],
+        [
+          1.66,
+          0.226,
+          0.0006,
+          0.05
+        ],
+        [
+          1.9,
+          0.257,
+          0.0001,
+          0.03
+        ],
+        [
+          2.14,
+          0.29,
+          0,
+          0
+        ],
+        [
+          2.38,
+          0.324,
+          0,
+          0
+        ],
+        [
+          2.62,
+          0.356,
+          0,
+          0
+        ],
+        [
+          2.86,
+          0.388,
+          0,
+          0
+        ],
+        [
+          3.1,
+          0.419,
+          0,
+          0
+        ],
+        [
+          3.34,
+          0.453,
+          0,
+          0
+        ],
+        [
+          3.58,
+          0.484,
+          0,
+          0
+        ]
+      ]
+    }
   }
 }

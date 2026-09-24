@@ -23,5 +23,5 @@ window.addEventListener('unhandledrejection', e => { if (!window.__ready) window
 // Paint the shell before constructors start baking procedural materials.
 requestAnimationFrame(() => requestAnimationFrame(() => {
   window.__loading('Preparing the coastline', 4);
-  import('./webcuda/main.js').catch(window.__loadError);
+  import('./main.js').catch(window.__loadError);
 }));

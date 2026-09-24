@@ -373,6 +373,7 @@ class Emitter {
         if(String(base.type).startsWith('cw_bufferref_'))return bufferReferenceIndex(this,n,base,this.expr(n.index),raw);
         if(String(base.type).startsWith('cw_deviceptr_'))return deviceHeapIndex(this,n,base,index,raw);
         if(n.dereference&&!['buffer','buffer-alias'].includes(base.rootSymbol?.kind))this.fail('Dereference requires a storage-buffer pointer.',n);
+        if(vectorLength(base.type)&&['i32','u32'].includes(index.type))return this.result(n,vectorElement(base.type),`${base.code}[${index.code}]`,[...base.pre,...index.pre],{rootSymbol:base.rootSymbol});
         if (!isArray(base.type) || !['i32', 'u32'].includes(index.type)) this.fail('Indexing requires an array and a 32-bit integer index.', n);
         const offset=base.code===base.rootSymbol?.code?base.rootSymbol.offsetCode:undefined;let indexCode=offset?`(${offset} + ${this.convert(index.code,index.type,'i32',n)})`:index.code;
         const capturePre=[];if(captureIndex&&['local','shared','buffer','buffer-alias'].includes(base.rootSymbol?.kind)){const temp='cw_argument_index_'+this.temp++;capturePre.push(`let ${temp} = ${indexCode};`);indexCode=temp;}
@@ -765,6 +766,16 @@ class Emitter {
     const casts = {uchar:'cw_uchar',float: 'f32', int: 'i32', uint: 'u32', bool: 'bool'};
     if(name==='float'&&n.args.length===1){const value=this.expr({kind:'cast',target:'f32',value:n.args[0],token:n.token});return this.result(n,'f32',value.code,value.pre);}
     const args = n.args.map(a => this.argument(a)), pre = args.flatMap(a => a.pre);
+    // Graphics-stage intrinsics. The graphics adapter replaces the compute
+    // entry before validation; derivative calls remain native fragment ops.
+    if (['__sb_dFdx','__sb_dFdy','__sb_fwidth'].includes(name)) {
+      if(args.length!==1)this.fail('A graphics derivative needs one argument.',n);
+      return this.result(n,args[0].type,`${{__sb_dFdx:'dpdx',__sb_dFdy:'dpdy',__sb_fwidth:'fwidth'}[name]}(${args[0].code})`,pre);
+    }
+    if(name.startsWith('__sb_texture')||name.startsWith('__sb_texelFetch')) {
+      const type=name.startsWith('__sb_textureSize')?(name.endsWith('Array')||name.endsWith('3D')?'vec3<f32>':'vec2<f32>'):'vec4<f32>';
+      return this.result(n,type,`${name.slice(2)}_${args.length}(${args.map((a,i)=>i===0?this.convert(a.code,a.type,'i32',n):i===1&&name.startsWith('__sb_textureSize')?this.convert(a.code,a.type,'i32',n):i===2&&!name.startsWith('__sb_textureGrad')?this.convert(a.code,a.type,name.startsWith('__sb_texelFetch')?'i32':'f32',n):a.code).join(', ')})`,pre);
+    }
     if(n.printfIntegerArguments&&args.some(a=>!['i32','u32','cw_short','cw_ushort','cw_uchar','bool'].includes(a.type)))this.fail('Diagnostic integer formats require integer arguments.',n);
     if (['__float_as_uint','__uint_as_float','__float_as_int','__int_as_float'].includes(name)) {
       const types = {__float_as_uint:['f32','u32'],__uint_as_float:['u32','f32'],__float_as_int:['f32','i32'],__int_as_float:['i32','f32']};
@@ -807,7 +818,7 @@ class Emitter {
     if(name==='abs'){if(args.length!==1||!(args[0].type==='i32'||narrow(args[0].type)))this.fail('abs requires a signed integer or promoted narrow integer.',n);return this.result(n,'i32',`abs(${this.convert(args[0].code,args[0].type,'i32',n)})`,pre);}
     if(name==='__saturatef'){if(n.args.length!==1)this.fail('__saturatef requires one float argument.',n);const a=args[0];if(a.type!=='f32')this.fail('__saturatef requires a float argument.',n);return this.result(n,'f32',`clamp(${a.code}, 0.0f, 1.0f)`,a.pre);}
     if(['fabs','floor'].includes(name)&&(args.length!==1||args[0].type!=='f32'))this.fail(name+' supports the CUDA float overload; double precision is unavailable.',n);
-    const unary = {sinf: 'sin', cosf: 'cos', tanf: 'tan', tan: 'tan', sqrtf: 'sqrt', rsqrtf: 'inverseSqrt', expf: 'exp', __expf:'exp', exp2f: 'exp2', logf: 'log', __logf:'log', log2f: 'log2', fabs:'abs', fabsf: 'abs', floor: 'floor', floorf: 'floor', ceilf: 'ceil', truncf: 'trunc'};
+    const unary = {acosh:'acosh',degrees:'degrees',radians:'radians',asinh:'asinh',sinh:'sinh',cosh:'cosh',atanf:'atan',acos:'acos',asin:'asin',atan:'atan',sinf: 'sin', cosf: 'cos', tanf: 'tan', tan: 'tan', sqrtf: 'sqrt', rsqrtf: 'inverseSqrt', expf: 'exp', __expf:'exp', exp2f: 'exp2', logf: 'log', __logf:'log', log2f: 'log2', fabs:'abs', fabsf: 'abs', floor: 'floor', floorf: 'floor', ceilf: 'ceil', truncf: 'trunc'};
     if(['fmin','fmax'].includes(name)&&(args.length!==2||args.some(a=>a.type!=='f32')))this.fail(name+' requires two float arguments.',n);
     if(['pow','powf'].includes(name)){
       if(args.length!==2)this.fail(name+' requires two arguments.',n);

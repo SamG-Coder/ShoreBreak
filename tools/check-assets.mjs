@@ -29,8 +29,8 @@ async function visit(directory) {
   for (const entry of await readdir(directory, { withFileTypes: true })) {
     const absolute = path.join(directory, entry.name);
     if (entry.isDirectory()) {
-      // Compiler outputs have their own content hashes in generated/manifest.json.
-      if (absolute === path.join(root,'public','generated')) continue;
+      // CUDA outputs have their own hashes in faithful/graphics/build.json.
+      if (absolute === path.join(root,'public','faithful')) continue;
       await visit(absolute);
     }
     else {

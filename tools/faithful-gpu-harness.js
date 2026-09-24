@@ -6,7 +6,7 @@ export class OriginalShader {
   if(!gl.getExtension('EXT_color_buffer_float'))throw Error('RGBA32F unavailable');
   gl.getExtension('OES_texture_float_linear');
   const compile=(type,s)=>{const a=gl.createShader(type);gl.shaderSource(a,s);gl.compileShader(a);if(!gl.getShaderParameter(a,gl.COMPILE_STATUS))throw Error(gl.getShaderInfoLog(a));return a;};
-  this.program=gl.createProgram();gl.attachShader(this.program,compile(gl.VERTEX_SHADER,'#version 300 es\nvoid main(){vec2 p=vec2((gl_VertexID<<1)&2,gl_VertexID&2);gl_Position=vec4(p*2.0-1.0,0,1);}'));
+  this.program=gl.createProgram();gl.attachShader(this.program,compile(gl.VERTEX_SHADER,'#version 300 es\nout vec2 vUv;void main(){vec2 p=vec2((gl_VertexID<<1)&2,gl_VertexID&2);vUv=p;gl_Position=vec4(p*2.0-1.0,0,1);}'));
   gl.attachShader(this.program,compile(gl.FRAGMENT_SHADER,'#version 300 es\nprecision highp float;precision highp int;\nlayout(location=0) out vec4 sbOutput;\n'+source.replaceAll('gl_FragColor','sbOutput')));gl.linkProgram(this.program);if(!gl.getProgramParameter(this.program,gl.LINK_STATUS))throw Error(gl.getProgramInfoLog(this.program));
   gl.useProgram(this.program);this.fb=gl.createFramebuffer();gl.bindFramebuffer(gl.FRAMEBUFFER,this.fb);
   for(let i=0;i<outputs;i++){this.texture(width,height,null,i);gl.framebufferTexture2D(gl.FRAMEBUFFER,gl.COLOR_ATTACHMENT0+i,gl.TEXTURE_2D,this.lastTexture,0);}

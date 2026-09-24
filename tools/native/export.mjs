@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import * as THREE from '../../node_modules/three/build/three.module.js';
-globalThis.location={search:'?explore&capture'};
+globalThis.location={search:process.env.QA_MODE==='clip'?'?clip&capture':'?explore&capture'};
 fs.mkdirSync('.qa',{recursive:true});
 const root=path.resolve('public');
 globalThis.fetch=async url=>new Response(fs.readFileSync(path.join(root,url)));
@@ -83,8 +83,9 @@ const shared={uFocus:{value:new THREE.Vector2(-34,6.8)},uTime:{value:0},uEvtCoun
 for(const x of 'ABCDEFG')shared['uEvt'+x]={value:new Float32Array(24)};
 initCoastalBed(shared);
 const schedule=new Schedule({seed:7}),swell=new Swell(shared,schedule),swe=new SwashSim(r,shared),water=new WaterSurface(shared,{cols:360,swell}),lips=[new LipRibbon(shared,0),new LipRibbon(shared,1)];
-const beach=new Beach(r,shared);[beach.palms]=await Promise.all([loadPalms(r,shared),beach.promenade.loadAssets(r),beach.loadAssets(r)]);beach.mesh.add(beach.palms);shared.uSandPhoto.value=beach.material.uniforms.uPhotoColor.value;
-bakeCoastShadows(r,[beach.backdrop.seafront.group,beach.palms,beach.rocks.mesh],shared);
+const beach=new Beach(r,shared);
+if(CONFIG.explore){[beach.palms]=await Promise.all([loadPalms(r,shared),beach.promenade.loadAssets(r),beach.loadAssets(r)]);beach.mesh.add(beach.palms);shared.uSandPhoto.value=beach.material.uniforms.uPhotoColor.value;
+bakeCoastShadows(r,[beach.backdrop.seafront.group,beach.palms,beach.rocks.mesh],shared);}
 const sky=new Sky(shared),ww=new Whitewater(r,shared,schedule),post=new Post(r,W,H,shared),contact=new ContactLight();contact.resize(W,H);
 ww.params.bufS=.7;ww.params.bufH=1080;
 const hdr={type:THREE.HalfFloatType,minFilter:THREE.LinearFilter,magFilter:THREE.LinearFilter};
@@ -96,6 +97,7 @@ const cam=new THREE.PerspectiveCamera(58,W/H,CONFIG.camera.near,CONFIG.camera.fa
 const probe=new SurfaceProbe(shared),bubbles=new UnderwaterBubbles(shared,schedule),us=new THREE.Scene();us.add(water.underMesh);
 const plume=new UnderwaterPlume(shared,bubbles.material.uniforms);plume.resize(W,H);
 if(process.env.QA_PROGRAMS){
+ for(const scene of [os,bs,ws,us,bubbles.scene,swell.scene,...Object.values(ww).filter(v=>v?.isScene)])scene.traverse(o=>{if(o.isMesh)o.frustumCulled=false;});
  for(const pass of [...FullscreenPass.all])r.render(pass.scene,pass.camera);
  for(const [scene,camera]of [[os,cam],[bs,cam],[ws,cam],[us,cam],[bubbles.scene,cam],[swell.scene,swell.camera]])r.render(scene,camera);
  for(const value of Object.values(ww))if(value?.isScene)r.render(value,cam);

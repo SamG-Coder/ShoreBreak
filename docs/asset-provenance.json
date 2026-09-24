@@ -33,13 +33,6 @@
       "license": "CC0-1.0",
       "asset_url": "https://polyhaven.com/a/sand_03",
       "license_url": "https://polyhaven.com/license"
-    },
-    {
-      "id": "shorebreak_webcuda_geometry",
-      "name": "ShoreBreak scenery converted to CUDA BVH",
-      "license": "MIT",
-      "asset_url": "https://github.com/cryptomanavan/ShoreBreak",
-      "license_url": "https://github.com/cryptomanavan/ShoreBreak/blob/main/LICENSE"
     }
   ],
   "inherited_source_checks": [
@@ -378,20 +371,6 @@
       "license": "MIT",
       "bytes": 297,
       "sha256": "c095107d9a071df4230f64ee5431e800312e678cc887f79bda10da2d18b444f2"
-    },
-    {
-      "path": "public/assets/webcuda/scene.bin",
-      "bytes": 27660928,
-      "sha256": "d843dd0084911d6f4be4c0c3b7893f9c6476678ab93a21c438579f2c8af3a272",
-      "license": "MIT",
-      "source_id": "shorebreak_webcuda_geometry"
-    },
-    {
-      "path": "public/assets/webcuda/CREDITS.txt",
-      "bytes": 305,
-      "sha256": "08c93662468c40570e1a058002a1b12536e77a209b5008e510001a68a001e693",
-      "license": "MIT",
-      "source_id": "shorebreak_webcuda_geometry"
     }
   ]
 }

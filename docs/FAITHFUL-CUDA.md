@@ -1,75 +1,68 @@
-# Faithful calculation port
+# Faithful CUDA port and validation
 
-The corrected calculation source is **`ShoreBreak.cu`**, at the repository root.
-The WebCuda build reads this one file and discovers its kernel entry points. It
-does not assemble the rejected renderer's `kernels/*.cu` files.
+The canonical GPU source is the single root **`ShoreBreak.cu`**. The default application runs its graphics stages through WebCuda. The earlier approximate ray renderer and `kernels/*.cu` files have been removed.
 
-This work is on `faithful-cuda-calculations`. The existing default application
-still runs the earlier, rejected approximation. The corrected calculation kernels
-have not yet been connected to a replacement renderer. **This is not a completed
-application migration or a claim that the currently displayed waves are fixed.**
+## Ported calculations
 
-## Ported equations
+- Complete original breaker stage, transport, profile, derivative, ballistic lip, injection and foam functions.
+- Full original lip cross-section and residual displacement, including crest skin, shoulder, Bezier jet, hanging curtain, cap, underside, fillet, barrel wall and culling.
+- Three 256 x 256 ocean cascades with original spectrum evolution, 16 Stockham FFT passes and displacement/slope composition.
+- Original Kurganov–Petrova flux: minmod reconstruction, desingularized velocities, wet/dry fallback, hydrostatic balance and boundaries.
+- Bed/state initialization, source injection and friction, foam/lace transport, wetness, height/view, scrolling and far-field passes.
+- Original water/terrain/scenery graphics, whitewater, underwater effects, contact lighting, exposure and post-processing in both Explore and fixed-camera clip modes.
 
-- The complete original breaker stage, transport, profile, derivative, ballistic
-  lip, injection and foam functions from `src/glsl/breaker.js` and its dependencies.
-- The original `sheetRaw` cross-section from `src/water/LipRibbon.js`: crest skin,
-  shoulder, Bezier jet, hanging curtain, cap, underside, fillet and barrel wall.
-  View-frustum culling and the residual full-surface displacement remain renderer work.
-- Three 256 × 256 ocean cascades with the original spectrum evolution, all 16
-  Stockham FFT passes and displacement/slope composition from `OceanFFT.js`.
-- The original Kurganov–Petrova flux, including minmod reconstruction,
-  desingularized velocities, wet/dry fallback, hydrostatic balance and boundaries.
-- Bed/state initialization, source injection and friction, foam and lace transport,
-  wetness, surface height/view, scrolling and far-field passes from `SwashSim.js`.
+The file contains **21 diagnostic compute entry points and 186 graphics stages (93 vertex/fragment programs)**. The integrated renderer uses the graphics stages to retain the original render-target precision, texture filtering, blending and pass order. The compute entries provide separate numerical tests of the underlying equations.
 
-The calculation port has 19 kernel entry points in one translation unit. It uses
-WebCuda's CUDA subset, including vector arithmetic and reference output parameters.
-This file targets WebCuda; compilation with NVIDIA nvcc has not been established.
+The original JavaScript host retains scheduling, initialization, controls, scene construction and CPU math. Three.js CPU classes are retained, while Three.js rendering is replaced. This targets WebCuda's CUDA subset; compilation with NVIDIA nvcc has not been established.
 
-## Build and comparison
+## Reproduce validation
 
 ```sh
-npm run compile:faithful
+npm test
 npm run test:faithful
+npm run test:graphics
+npm run build
+npm run test:webcuda:dist
+node tools/faithful-browser.mjs --dist --clip
+node tools/reference-browser.mjs
+node tools/reference-browser.mjs --clip
 ```
 
-`compile:faithful` compiles the existing `.cu` file directly. Test fixtures and
-upstream shader metadata are exported separately, without regenerating that file.
-The comparison tests require Microsoft Edge with a working WebGPU adapter on Windows.
+GPU tests use Microsoft Edge with working WebGPU on Windows. The numerical oracle executes original GLSL in WebGL2 float32 framebuffers. CUDA runs through the vendored WebCuda compiler on WebGPU, with identical float32 inputs, original event packing and original lookup tables. WebGL is used only by the independent test oracle and upstream reference capture.
 
-The test oracle executes the **original GLSL** in a WebGL2 RGBA32F framebuffer.
-The CUDA kernels run through the vendored WebCuda compiler/runtime on WebGPU, with
-the same float32 inputs, original event packing and original lookup tables.
-Results are read back and compared numerically. WebGL and Three.js in these tests
-are reference infrastructure, not a proposed production rendering dependency.
+The browser integration test loads the complete built application, advances the waves, reads the full-resolution shallow-water state, captures front and underwater views, and exercises a 641 x 359 canvas. It records GPU errors and fails if the application creates a WebGL context. Reports and captures are in `.qa/faithful/`.
 
-The FFT test checks every pass both independently, with identical inputs, and in
-the complete evolving-spectrum chain. The flux test includes wet/dry cells and
-compares 1, 6 and 36 substeps. The swash test exercises all 13 auxiliary passes.
-Wave and lip tests sample 4,096 positions/times/rows each. Reports are written to
-`.qa/faithful/` and include worst differences and failing sample counts.
+`reference-browser.mjs` loads the pinned upstream `11c8c05` entry and original renderer through a test-only Vite transform. It does not modify the application or the CUDA source.
 
-Different GPU math and texture units do not promise bit-for-bit equality. The
-lookup sampler performs linear interpolation in float32. The original NVIDIA
-texture unit quantizes its interpolation weights, so direct lookup diagnostics
-use a local, table-slope-based bound for half an eight-bit filter-weight step plus
-two coordinate ULPs. Other GPU vendors need their own comparison run. The FFT slope tolerance allows
-the accumulated spectrum-phase rounding (8e-6 absolute plus 2e-4 relative); the
-isolated FFT tolerance is 2e-7 absolute plus 2e-6 relative. Displacement is checked
-at 2e-6 absolute plus 2e-4 relative. The wave/swash diagnostic tolerance is 2e-4
-absolute plus 2e-4 relative; individual measured maxima remain in the reports.
+## Numerical results
 
-## What remains
+Validated on NVIDIA Blackwell through Edge WebGPU:
 
-The application must still dispatch these kernels at the original resolutions,
-step order and texture precisions, retain the original schedule and initialization,
-and port the full water geometry/shading, whitewater, underwater and post passes.
-Spectrum initialization and event scheduling currently come from the original
-JavaScript in the tests. The tests have not established long-duration coupled
-simulation stability or final-image parity. The earlier approximate renderer and
-its screenshots must not be used as evidence for the corrected port.
+| Comparison | Cases | Failed |
+| --- | ---: | ---: |
+| Original breaker/wave calculations | 4,096 queries | 0 |
+| Original lip cross-section | 4,096 queries | 0 |
+| Compute spectrum, FFT and flux | 75 output comparisons | 0 |
+| Compute auxiliary swash | 17 output comparisons | 0 |
+| Integrated graphics spectrum, FFT and flux | 43 output comparisons | 0 |
+| Auxiliary swash, compute and integrated graphics | 34 output comparisons | 0 |
+| Graphics stage validation | 93 programs / 186 stages | 0 |
+| Original procedural pebble bake | 2 outputs / 131,072 values | 0 |
 
-The `tools/port-*.mjs` scripts record the mechanical source translation used to
-create the file. They are authoring aids, not part of its normal compilation.
-Original upstream source files remain unchanged as the reference.
+The graphics FFT chain's largest absolute difference is about 5.5e-6; the 36-step flux comparison differs by about 4.5e-8. Full reports, including worst values and per-pass tolerances, are summarized in `faithful-validation.json`.
+
+Same-time captures at 3.15 seconds in fixed-camera mode:
+
+| WebCuda | Original upstream renderer |
+| --- | --- |
+| ![WebCuda wave](screenshots/webcuda-wave.png) | ![Upstream wave](screenshots/upstream-wave.png) |
+
+GPU math and texture units do not promise bit-for-bit equality. The compute lookup sampler performs float32 interpolation; the original NVIDIA texture unit quantizes interpolation weights. Direct lookup diagnostics therefore use a table-slope-based bound for half an eight-bit filter-weight step plus two coordinate ULPs. Other GPU vendors need their own comparison run.
+
+The FFT slope tolerance permits accumulated spectrum-phase rounding (8e-6 absolute plus 2e-4 relative); isolated FFT uses 2e-7 absolute plus 2e-6 relative. Displacement uses 2e-6 absolute plus 2e-4 relative. Wave/swash diagnostics use 2e-4 absolute plus 2e-4 relative. Final images can differ with texture filtering, floating-point evaluation and rasterization; the tests do not assert pixel identity or long-duration simulation stability.
+
+## Source maintenance
+
+Normal builds compile the existing `ShoreBreak.cu`, using stage IO metadata; they never regenerate its calculations from GLSL. `public/faithful/graphics/build.json` ties source, compiler, metadata and output artifacts together with SHA-256 hashes.
+
+The `tools/port-*.mjs` scripts record the mechanical translation used to author the file. To refresh graphics from the upstream host modules, export both program sets with `tools/native/export.mjs` (`QA_PROGRAMS=.qa/programs.json`, then `QA_MODE=clip` with `QA_PROGRAMS=.qa/programs-clip.json`) and run `tools/port-graphics.mjs`. This is an explicit authoring operation that replaces the graphics sections of the CUDA source. Run all parity checks after changing the source or compiler.

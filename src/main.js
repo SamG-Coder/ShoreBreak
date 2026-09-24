@@ -1,6 +1,6 @@
-import { checkShaderBudget } from './core/shaderBudget.js';
+import { WebCudaRenderer } from './webcuda/renderer.js';
 import { SCENE_AREA, SCENE_SCALE, PIXEL_BUDGET_SCALE, normalizeResolutionScale, usesAdaptiveResolution, renderPixelRatio } from './core/viewport.js';
-import * as THREE from 'three';
+import * as THREE from 'three/src/Three.Core.js';
 import { FixedClock } from './core/clock.js';
 import { CONFIG, sunDirection, deg } from './config.js';
 import { Schedule } from './core/schedule.js';
@@ -58,7 +58,7 @@ await breathe();
 if (EXPLORE) document.body.classList.add('explore');
 
 // ------------------------------------------------------------------ renderer
-const renderer = new THREE.WebGLRenderer({ antialias: false, powerPreference: 'high-performance', alpha: false, preserveDrawingBuffer: CAPTURE });
+const renderer = await WebCudaRenderer.create();
 renderer.autoClear = false;
 renderer.debug.onShaderError = (context, program, vertexShader, fragmentShader) => {
   const logs = [context.getProgramInfoLog(program),
@@ -70,14 +70,7 @@ renderer.debug.onShaderError = (context, program, vertexShader, fragmentShader) 
 renderer.setPixelRatio(1);
 const stage = document.getElementById('stage');
 stage.appendChild(renderer.domElement);
-const gl = renderer.getContext();
-if (!renderer.capabilities.isWebGL2 && !(gl instanceof WebGL2RenderingContext)) throw new Error('WebGL2 required');
-if (!renderer.extensions.get('EXT_color_buffer_float')) throw new Error('Floating-point rendering is required.');
-renderer.domElement.addEventListener('webglcontextlost', (event) => { event.preventDefault(); window.__loadError(new Error('Graphics context lost')); });
-renderer.domElement.addEventListener('webglcontextrestored', () => location.reload());
-renderer.extensions.get('OES_texture_float_linear');
-const maxRenderDimension = Math.min(gl.getParameter(gl.MAX_TEXTURE_SIZE),
-  gl.getParameter(gl.MAX_RENDERBUFFER_SIZE), ...gl.getParameter(gl.MAX_VIEWPORT_DIMS));
+const maxRenderDimension = renderer.device.limits.maxTextureDimension2D;
 
 // ------------------------------------------------------------------ shared uniforms
 const V3 = (a) => new THREE.Vector3(...a);
@@ -309,28 +302,6 @@ function stepSim() {
   whitewater.step(simT, DT);
   simT += DT;
 }
-const __px = new Uint8Array(4);
-const gpuSync = () => { renderer.setRenderTarget(null); gl.readPixels(0, 0, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, __px); };
-function seek(t) {
-  clock.reset();
-  surfaceProbe?.reset();
-  if (controls) { frameDt = 0; controls.update(0); }
-  updateFocus();
-  swe.reset();
-  whitewater.reset();
-  simT = t - CONFIG.sim.warmup;
-  if (!window.__seeded) {
-    // first run: time the first-use compiles of each subsystem
-    schedule.pack(simT);
-    shared.uTime.value = simT;
-    swe.step(simT, DT); gpuSync(); mark('swe-step');
-    whitewater.step(simT, DT); gpuSync(); mark('ww-step');
-    swe.reset(); whitewater.reset();
-    window.__seeded = true;
-  }
-  while (simT < t - 1e-9) stepSim();
-}
-
 // ------------------------------------------------------------------ auto-exposure
 // The phone's metering pumps ±0.15 EV: it darkens ~0.25 s after whitewater fills the
 // lower frame and recovers before the next break (far-sea analysis §2.2). Inside the
@@ -504,17 +475,17 @@ window.addEventListener('keydown', e => {
 document.addEventListener('visibilitychange', () => { last = performance.now(); clock.reset(); dyn.acc = dyn.n = 0; });
 
 // deterministic capture API (tools/capture.mjs)
-window.__seek = (t) => { seek(t); render(); gl.finish(); return simT; };
-window.__advance = (sec) => { const end = simT + sec - 1e-9; while (simT < end) stepSim(); render(); gl.finish(); return simT; };
+window.__seek = async (t) => { await warmSimulation(t, false); render(); await drainGPU(); return simT; };
+window.__advance = async (sec) => { const end = simT + sec - 1e-9; while (simT < end) stepSim(); render(); await drainGPU(); return simT; };
 window.__diag = () => renderer.info.programs.map((p) => ({ name: p.name, type: p.type, diag: p.diagnostics ? { runnable: p.diagnostics.runnable, log: p.diagnostics.programLog, frag: p.diagnostics.fragmentShader?.log?.slice(0, 600), vert: p.diagnostics.vertexShader?.log?.slice(0, 600) } : null }));
 window.__draw = async () => { frameDt = 0; render(); await drainGPU(); };
 window.__grab = () => renderer.domElement.toDataURL('image/png');
 // debug: read back the shallow-water state -> stats + false-colour image (h | foam | speed)
-window.__sweDebug = () => {
+window.__sweDebug = async () => {
   const { nx, nz } = swe;
   const st = new Float32Array(nx * nz * 4), bd = new Float32Array(nx * nz * 4);
-  renderer.readRenderTargetPixels(swe.state.read, 0, 0, nx, nz, st);
-  renderer.readRenderTargetPixels(swe.bed, 0, 0, nx, nz, bd);
+  await renderer.readRenderTargetPixelsAsync(swe.state.read, 0, 0, nx, nz, st);
+  await renderer.readRenderTargetPixelsAsync(swe.bed, 0, 0, nx, nz, bd);
   const cv = document.createElement('canvas'); cv.width = nx * 3; cv.height = nz;
   const cx = cv.getContext('2d'); const img = cx.createImageData(nx * 3, nz);
   let maxH = 0, maxV = 0, wetBeach = 0, nan = 0, mass = 0;
@@ -542,31 +513,11 @@ window.__sweDebug = () => {
   }
   return { maxH, maxV, wetBeach, nan, mass: mass * swe.dx * swe.dz, prof, img: cv.toDataURL() };
 };
-// GPU timing of n rendered frames (each with the usual 2 sim steps)
-// GPU timing with EXT_disjoint_timer_query_webgl2 (wall-clock is meaningless when several
-// processes share the GPU). Returns ms of GPU time per rendered frame / per sim step.
-window.__bench = async (n = 60) => {
-  const ext = gl.getExtension('EXT_disjoint_timer_query_webgl2');
-  const px = new Uint8Array(4);
-  const sync = () => { renderer.setRenderTarget(null); gl.readPixels(0, 0, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, px); };
-  const measure = async (fn) => {
-    if (!ext) { sync(); const t0 = performance.now(); for (let i = 0; i < n; i++) fn(); sync(); return (performance.now() - t0) / n; }
-    const qs = [];
-    for (let i = 0; i < n; i++) { const q = gl.createQuery(); gl.beginQuery(ext.TIME_ELAPSED_EXT, q); fn(); gl.endQuery(ext.TIME_ELAPSED_EXT); qs.push(q); }
-    sync();
-    let total = 0, got = 0;
-    for (const q of qs) {
-      for (let k = 0; k < 200 && !gl.getQueryParameter(q, gl.QUERY_RESULT_AVAILABLE); k++) await new Promise((r) => setTimeout(r, 5));
-      if (gl.getParameter(ext.GPU_DISJOINT_EXT)) continue;
-      total += gl.getQueryParameter(q, gl.QUERY_RESULT) / 1e6; got++;
-      gl.deleteQuery(q);
-    }
-    return got ? total / got : NaN;
-  };
-  const msRender = await measure(() => render());
-  const msSim = await measure(() => stepSim());
-  const msFrame = msRender + 2 * msSim;
-  return { gpuMsPerFrame: +msFrame.toFixed(2), gpuMsRender: +msRender.toFixed(2), gpuMsPerSimStep: +msSim.toFixed(2), fps: +(1000 / msFrame).toFixed(1), timer: !!ext, W, H };
+// Queue-complete wall timings include host work and GPU execution.
+window.__bench = async (n = 30) => {
+  const measure=async fn=>{await drainGPU();const start=performance.now();for(let i=0;i<n;i++){fn();await drainGPU();}return (performance.now()-start)/n;};
+  const msRender=await measure(()=>render()),msSim=await measure(()=>stepSim());
+  return {msRender,msSim,estimatedMsFrame:msRender+2*msSim,timer:'queue-complete wall clock',W,H};
 };
 if (controls) {
   const crouchButton=document.getElementById('btn-crouch');
@@ -596,47 +547,29 @@ window.__params = { post: () => post.params, shared, schedule, CONFIG };
 
 // ------------------------------------------------------------------ start
 const overlay = document.getElementById('loading');
-// Compile every program up front and in parallel (KHR_parallel_shader_compile lets the GPU
-// process compile on worker threads; under ANGLE/D3D these big shaders are slow to compile
-// one after another). Programs are keyed like the real draws: offscreen passes with a render
-// target bound, the final post pass to the canvas.
+// Rehearse the actual pass graph to compile the exact attachment and depth
+// variants in parallel, without executing simulation or rendering draws.
 async function precompile() {
-  const jobs = [];
-  const finalPass = post.pAA;
-  const lipVis = lips.map((l) => l.mesh.visible);
-  lips.forEach((l) => { l.visible = true; });
-  renderer.setRenderTarget(rtMain);
-  const scenes = [[opaqueScene, camera], [backScene, camera], [waterScene, camera],[underScene,camera]];
-  if(bubbles)scenes.push([bubbles.scene,camera]);
-  if(swell)scenes.push([swell.scene,swell.camera]);
-  for (const k of Object.keys(whitewater)) {
-    const v = whitewater[k];
-    if (v && v.isScene) scenes.push([v, camera]);
+  await drainGPU();
+  const savedTime=simT,saved=controls?{x:controls.pos.x,z:controls.pos.z,eyeY:controls.eyeY,yaw:controls.yaw,pitch:controls.pitch}:null;
+  const culled=[];opaqueScene.traverse(o=>{if(o.isMesh){culled.push([o,o.frustumCulled]);o.frustumCulled=false;}});
+  renderer.beginCompile();
+  try {
+    simT=3.15;render(true);stepSim();swe.reset();whitewater.reset();
+    if(controls){controls.pos.z=-6;controls.eyeY=-.4;controls.yaw=0;controls.pitch=.85;render(true);}
+    if(surfaceProbe?.pending)await surfaceProbe.ready;
+  } finally {
+    renderer.preparing=false;
+    for(const [o,value]of culled)o.frustumCulled=value;
+    if(saved){Object.assign(controls.pos,{x:saved.x,z:saved.z});Object.assign(controls,{eyeY:saved.eyeY,yaw:saved.yaw,pitch:saved.pitch});}
+    simT=savedTime;surfaceProbe?.reset();updateCamera(simT);updateFocus();
   }
-  for (const [sc, cam] of scenes) jobs.push(renderer.compileAsync(sc, cam));
-  for (const p of FullscreenPass.all) if (p !== finalPass) jobs.push(renderer.compileAsync(p.scene, p.camera));
-  renderer.setRenderTarget(null);
-  jobs.push(renderer.compileAsync(finalPass.scene, finalPass.camera));
-  await Promise.all(jobs);
-  window.__graphicsInfo = checkShaderBudget(gl, renderer.info.programs);
-  lips.forEach((l, i) => { l.visible = lipVis[i]; });
+  await renderer.endCompile();
   mark('precompiled');
 }
 // Wait for GPU work without a main-thread readPixels/finish stall. This also bounds
 // command-queue growth during warmup, so the loader remains responsive on slow GPUs.
-async function drainGPU() {
-  const fence = gl.fenceSync(gl.SYNC_GPU_COMMANDS_COMPLETE, 0);
-  if (!fence) throw new Error('Graphics initialization interrupted');
-  gl.flush();
-  try {
-    while (true) {
-      const result = gl.clientWaitSync(fence, 0, 0);
-      if (result === gl.ALREADY_SIGNALED || result === gl.CONDITION_SATISFIED) break;
-      if (result === gl.WAIT_FAILED || gl.isContextLost()) throw new Error('Graphics initialization interrupted');
-      await new Promise(r => setTimeout(r, 8));
-    }
-  } finally { gl.deleteSync(fence); }
-}
+async function drainGPU() { await renderer.idle(); }
 async function warmViews() {
   // Compilation alone does not upload vertex/index buffers or create every
   // VAO. Draw the complete opaque scene once, including off-camera instances.
@@ -754,7 +687,7 @@ async function start() {
     loading('Finishing the light', 91 + settled);
   }
   clock.reset(); frameDt = 0; dyn.acc = dyn.n = 0;
-  window.__graphicsInfo = checkShaderBudget(gl, renderer.info.programs);
+  window.__graphicsInfo = ({backend:'WebCuda',programs:renderer.info.programs.length,errors:renderer.errors});
   mark('ready');
   loading('Welcome to the shore', 100);
   window.__ready = true;
@@ -768,7 +701,7 @@ start().catch(window.__loadError);
 if (qs.has('gui')) {
   import('lil-gui').then(({ default: GUI }) => {
     const gui = new GUI({ title: 'Shorebreak' });
-    const ctl = { get time() { return +simT.toFixed(2); }, speed, paused, restart: () => seek(START_T) };
+    const ctl = { get time() { return +simT.toFixed(2); }, speed, paused, restart: () => restart(START_T) };
     gui.add(ctl, 'speed', 0, 2, 0.05).onChange((v) => { speed = v; });
     gui.add(ctl, 'paused').onChange((v) => { paused = v; });
     gui.add(ctl, 'restart');
