@@ -1,6 +1,7 @@
 import {chromium} from 'playwright-core';
 import {createServer} from 'vite';
-import {readFile,writeFile} from 'node:fs/promises';
+import {readFile,writeFile,mkdir} from 'node:fs/promises';
+await mkdir('.qa/graphics',{recursive:true});
 const manifest=JSON.parse(await readFile('tools/graphics-metadata.json','utf8')).stages;
 const server=await createServer({logLevel:'error',server:{port:0}});await server.listen();
 const browser=await chromium.launch({executablePath:'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe',headless:true,args:['--enable-unsafe-webgpu']});
