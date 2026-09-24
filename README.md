@@ -1,5 +1,11 @@
 # ShoreBreak — WebCuda
 
+> **Correction in progress:** the default application below is the earlier,
+> rejected approximation. The faithful calculation port is being developed in
+> the single root file [`ShoreBreak.cu`](ShoreBreak.cu). See
+> [its verified scope and remaining work](docs/FAITHFUL-CUDA.md).
+> These corrected kernels are not yet connected to the application renderer.
+
 ShoreBreak running through [SamG-Coder's CUDA WebShader / WebCuda](https://github.com/SamG-Coder/cuda-webshader).
 Ocean computation, shallow water, foam, wetness, camera physics, geometry intersection,
 lighting, spray, bubbles, image filtering, tone mapping and final pixel packing are authored

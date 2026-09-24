@@ -1,0 +1,1071 @@
+{
+  "source": "ShoreBreak.cu",
+  "sourceSha256": "caeb2022ece54d26c31d64e74651b072071649d4036654d0dbf6012937b99544",
+  "kernelCount": 19,
+  "adapter": {
+    "vendor": "nvidia",
+    "architecture": "blackwell"
+  },
+  "scope": "Calculation comparisons only. No complete renderer integration or visual parity claim.",
+  "reports": {
+    "parity": {
+      "count": 4096,
+      "failures": 0,
+      "maxErrors": [
+        7.152557373046875e-7,
+        3.8743019104003906e-7,
+        1.1920928955078125e-7,
+        2.384185791015625e-7,
+        9.5367431640625e-7,
+        0.00000286102294921875,
+        9.238719940185547e-7,
+        9.313225746154785e-8,
+        0.0000019073486328125,
+        6.705522537231445e-7,
+        0.0000010728836059570312,
+        0.0000011920928955078125,
+        8.344650268554688e-7,
+        0.00004553794860839844,
+        0.000004380941390991211,
+        0.00005745701491832733,
+        0,
+        0.0000643264502286911,
+        1.0570511221885681e-7,
+        0.0000033974647521972656,
+        9.5367431640625e-7,
+        8.940696716308594e-7,
+        0.000001430511474609375,
+        0.0000025120098143815994,
+        9.5367431640625e-7,
+        8.940696716308594e-7,
+        0.0000011920928955078125,
+        0.0000018924474716186523,
+        0.000001430511474609375,
+        0.0000024605542421340942,
+        0.00001564621925354004,
+        0.000012993812561035156,
+        7.972121238708496e-7,
+        0.000003129243850708008,
+        4.6938657760620117e-7,
+        0.000012159347534179688,
+        9.5367431640625e-7,
+        1.564621925354004e-7,
+        0.0000059604644775390625,
+        0.0001430511474609375,
+        0.00024047493934631348,
+        0.0003848075866699219,
+        0.00035822391510009766,
+        0.00042891502380371094,
+        0.000011444091796875,
+        0.0000057220458984375,
+        0.0000022351741790771484,
+        0.0000045299530029296875
+      ],
+      "worst": []
+    },
+    "lip-parity": {
+      "count": 4096,
+      "failures": 0,
+      "maxErrors": [
+        0.00006341934204101562,
+        0.000027336180210113525,
+        0.000001430511474609375,
+        0.0000025120098143815994,
+        5.960464477539063e-8,
+        2.5564804673194885e-7,
+        9.5367431640625e-7,
+        8.344650268554688e-7,
+        0.0000029802322387695312,
+        0.000002086162567138672,
+        4.6938657760620117e-7,
+        0
+      ],
+      "worst": []
+    },
+    "simulation-parity": [
+      {
+        "pass": "spectrum0",
+        "values": 786432,
+        "maxAbsolute": 6.600748747587204e-8,
+        "failures": 0,
+        "worst": {
+          "i": 749551,
+          "actual": -0.001026173704303801,
+          "expected": -0.0010261076968163252
+        }
+      },
+      {
+        "pass": "spectrum1",
+        "values": 786432,
+        "maxAbsolute": 2.1609594114124775e-9,
+        "failures": 0,
+        "worst": {
+          "i": 18420,
+          "actual": -0.00003744423156604171,
+          "expected": -0.00003744639252545312
+        }
+      },
+      {
+        "pass": "isolated fft 1/2/0",
+        "values": 786432,
+        "maxAbsolute": 0,
+        "failures": 0,
+        "worst": null
+      },
+      {
+        "pass": "fft 1/2/0",
+        "values": 786432,
+        "maxAbsolute": 6.600748747587204e-8,
+        "failures": 0,
+        "worst": {
+          "i": 749531,
+          "actual": -0.0010237309616059065,
+          "expected": -0.0010236649541184306
+        }
+      },
+      {
+        "pass": "isolated fft 1/2/1",
+        "values": 786432,
+        "maxAbsolute": 0,
+        "failures": 0,
+        "worst": null
+      },
+      {
+        "pass": "fft 1/2/1",
+        "values": 786432,
+        "maxAbsolute": 2.1609594114124775e-9,
+        "failures": 0,
+        "worst": {
+          "i": 18408,
+          "actual": -0.00003744850619114004,
+          "expected": -0.00003745066715055145
+        }
+      },
+      {
+        "pass": "isolated fft 1/4/0",
+        "values": 786432,
+        "maxAbsolute": 0,
+        "failures": 0,
+        "worst": null
+      },
+      {
+        "pass": "fft 1/4/0",
+        "values": 786432,
+        "maxAbsolute": 7.194466888904572e-8,
+        "failures": 0,
+        "worst": {
+          "i": 64116,
+          "actual": -0.00046163942897692323,
+          "expected": -0.0004615674843080342
+        }
+      },
+      {
+        "pass": "isolated fft 1/4/1",
+        "values": 786432,
+        "maxAbsolute": 0,
+        "failures": 0,
+        "worst": null
+      },
+      {
+        "pass": "fft 1/4/1",
+        "values": 786432,
+        "maxAbsolute": 2.164597390219569e-9,
+        "failures": 0,
+        "worst": {
+          "i": 18392,
+          "actual": 0.00003746350557776168,
+          "expected": 0.0000374656701751519
+        }
+      },
+      {
+        "pass": "isolated fft 1/8/0",
+        "values": 786432,
+        "maxAbsolute": 1.862645149230957e-9,
+        "failures": 0,
+        "worst": {
+          "i": 786300,
+          "actual": 0.015023581683635712,
+          "expected": 0.015023579820990562
+        }
+      },
+      {
+        "pass": "fft 1/8/0",
+        "values": 786432,
+        "maxAbsolute": 1.1082738637924194e-7,
+        "failures": 0,
+        "worst": {
+          "i": 17845,
+          "actual": -0.0016544751124456525,
+          "expected": -0.0016545859398320317
+        }
+      },
+      {
+        "pass": "isolated fft 1/8/1",
+        "values": 786432,
+        "maxAbsolute": 2.3283064365386963e-10,
+        "failures": 0,
+        "worst": {
+          "i": 776133,
+          "actual": -0.0026941688265651464,
+          "expected": -0.002694168593734503
+        }
+      },
+      {
+        "pass": "fft 1/8/1",
+        "values": 786432,
+        "maxAbsolute": 2.1973391994833946e-9,
+        "failures": 0,
+        "worst": {
+          "i": 773220,
+          "actual": -0.00003940739406971261,
+          "expected": -0.00003940959140891209
+        }
+      },
+      {
+        "pass": "isolated fft 1/16/0",
+        "values": 786432,
+        "maxAbsolute": 1.862645149230957e-9,
+        "failures": 0,
+        "worst": {
+          "i": 1796,
+          "actual": 0.014154819771647453,
+          "expected": 0.014154821634292603
+        }
+      },
+      {
+        "pass": "fft 1/16/0",
+        "values": 786432,
+        "maxAbsolute": 1.257285475730896e-7,
+        "failures": 0,
+        "worst": {
+          "i": 18261,
+          "actual": 0.0032855765894055367,
+          "expected": 0.0032854508608579636
+        }
+      },
+      {
+        "pass": "isolated fft 1/16/1",
+        "values": 786432,
+        "maxAbsolute": 2.3283064365386963e-10,
+        "failures": 0,
+        "worst": {
+          "i": 11141,
+          "actual": -0.0023731549736112356,
+          "expected": -0.0023731552064418793
+        }
+      },
+      {
+        "pass": "fft 1/16/1",
+        "values": 786432,
+        "maxAbsolute": 2.448359737172723e-9,
+        "failures": 0,
+        "worst": {
+          "i": 773348,
+          "actual": -0.00004560201341519132,
+          "expected": -0.000045604461774928495
+        }
+      },
+      {
+        "pass": "isolated fft 1/32/0",
+        "values": 786432,
+        "maxAbsolute": 3.725290298461914e-9,
+        "failures": 0,
+        "worst": {
+          "i": 1629,
+          "actual": 0.020377013832330704,
+          "expected": 0.020377017557621002
+        }
+      },
+      {
+        "pass": "fft 1/32/0",
+        "values": 786432,
+        "maxAbsolute": 1.6152625903487206e-7,
+        "failures": 0,
+        "worst": {
+          "i": 18113,
+          "actual": -0.0004295558901503682,
+          "expected": -0.00042939436389133334
+        }
+      },
+      {
+        "pass": "isolated fft 1/32/1",
+        "values": 786432,
+        "maxAbsolute": 4.656612873077393e-10,
+        "failures": 0,
+        "worst": {
+          "i": 11089,
+          "actual": 0.0029395148158073425,
+          "expected": 0.0029395143501460552
+        }
+      },
+      {
+        "pass": "fft 1/32/1",
+        "values": 786432,
+        "maxAbsolute": 2.6338966563344e-9,
+        "failures": 0,
+        "worst": {
+          "i": 18081,
+          "actual": 0.00013207709707785398,
+          "expected": 0.0001320797309745103
+        }
+      },
+      {
+        "pass": "isolated fft 1/64/0",
+        "values": 786432,
+        "maxAbsolute": 3.725290298461914e-9,
+        "failures": 0,
+        "worst": {
+          "i": 1113,
+          "actual": -0.0189390666782856,
+          "expected": -0.018939070403575897
+        }
+      },
+      {
+        "pass": "fft 1/64/0",
+        "values": 786432,
+        "maxAbsolute": 2.270098775625229e-7,
+        "failures": 0,
+        "worst": {
+          "i": 17812,
+          "actual": 0.0027274449821561575,
+          "expected": 0.002727217972278595
+        }
+      },
+      {
+        "pass": "isolated fft 1/64/1",
+        "values": 786432,
+        "maxAbsolute": 4.656612873077393e-10,
+        "failures": 0,
+        "worst": {
+          "i": 10789,
+          "actual": -0.004034343175590038,
+          "expected": -0.004034343641251326
+        }
+      },
+      {
+        "pass": "fft 1/64/1",
+        "values": 786432,
+        "maxAbsolute": 4.190951585769653e-9,
+        "failures": 0,
+        "worst": {
+          "i": 17668,
+          "actual": -0.000293432007310912,
+          "expected": -0.0002934361982624978
+        }
+      },
+      {
+        "pass": "isolated fft 1/128/0",
+        "values": 786432,
+        "maxAbsolute": 3.725290298461914e-9,
+        "failures": 0,
+        "worst": {
+          "i": 1201,
+          "actual": 0.03438059240579605,
+          "expected": 0.03438058868050575
+        }
+      },
+      {
+        "pass": "fft 1/128/0",
+        "values": 786432,
+        "maxAbsolute": 3.157183527946472e-7,
+        "failures": 0,
+        "worst": {
+          "i": 2764,
+          "actual": 0.0007276581600308418,
+          "expected": 0.0007279738783836365
+        }
+      },
+      {
+        "pass": "isolated fft 1/128/1",
+        "values": 786432,
+        "maxAbsolute": 9.313225746154785e-10,
+        "failures": 0,
+        "worst": {
+          "i": 13748,
+          "actual": 0.007544674910604954,
+          "expected": 0.007544675841927528
+        }
+      },
+      {
+        "pass": "fft 1/128/1",
+        "values": 786432,
+        "maxAbsolute": 5.398760549724102e-9,
+        "failures": 0,
+        "worst": {
+          "i": 18180,
+          "actual": -0.00007365169585682452,
+          "expected": -0.00007365709461737424
+        }
+      },
+      {
+        "pass": "isolated fft 1/256/0",
+        "values": 786432,
+        "maxAbsolute": 7.450580596923828e-9,
+        "failures": 0,
+        "worst": {
+          "i": 8129,
+          "actual": -0.042640820145606995,
+          "expected": -0.04264082759618759
+        }
+      },
+      {
+        "pass": "fft 1/256/0",
+        "values": 786432,
+        "maxAbsolute": 4.936009645462036e-7,
+        "failures": 0,
+        "worst": {
+          "i": 2253,
+          "actual": 0.02819918282330036,
+          "expected": 0.028199676424264908
+        }
+      },
+      {
+        "pass": "isolated fft 1/256/1",
+        "values": 786432,
+        "maxAbsolute": 9.313225746154785e-10,
+        "failures": 0,
+        "worst": {
+          "i": 14308,
+          "actual": 0.009012589231133461,
+          "expected": 0.009012590162456036
+        }
+      },
+      {
+        "pass": "fft 1/256/1",
+        "values": 786432,
+        "maxAbsolute": 5.9753801906481385e-9,
+        "failures": 0,
+        "worst": {
+          "i": 773393,
+          "actual": -0.00002854365811799653,
+          "expected": -0.00002853768273780588
+        }
+      },
+      {
+        "pass": "isolated fft 0/2/0",
+        "values": 786432,
+        "maxAbsolute": 0,
+        "failures": 0,
+        "worst": null
+      },
+      {
+        "pass": "fft 0/2/0",
+        "values": 786432,
+        "maxAbsolute": 5.187466740608215e-7,
+        "failures": 0,
+        "worst": {
+          "i": 270270,
+          "actual": 0.004336223937571049,
+          "expected": 0.004335705190896988
+        }
+      },
+      {
+        "pass": "isolated fft 0/2/1",
+        "values": 786432,
+        "maxAbsolute": 0,
+        "failures": 0,
+        "worst": null
+      },
+      {
+        "pass": "fft 0/2/1",
+        "values": 786432,
+        "maxAbsolute": 6.060872692614794e-9,
+        "failures": 0,
+        "worst": {
+          "i": 33053,
+          "actual": 0.0000624571111984551,
+          "expected": 0.00006245105032576248
+        }
+      },
+      {
+        "pass": "isolated fft 0/4/0",
+        "values": 786432,
+        "maxAbsolute": 0,
+        "failures": 0,
+        "worst": null
+      },
+      {
+        "pass": "fft 0/4/0",
+        "values": 786432,
+        "maxAbsolute": 6.50063157081604e-7,
+        "failures": 0,
+        "worst": {
+          "i": 11469,
+          "actual": 0.028330504894256592,
+          "expected": 0.028331154957413673
+        }
+      },
+      {
+        "pass": "isolated fft 0/4/1",
+        "values": 786432,
+        "maxAbsolute": 0,
+        "failures": 0,
+        "worst": null
+      },
+      {
+        "pass": "fft 0/4/1",
+        "values": 786432,
+        "maxAbsolute": 6.6720531322062016e-9,
+        "failures": 0,
+        "worst": {
+          "i": 66821,
+          "actual": -0.00008572328806621954,
+          "expected": -0.00008572996011935174
+        }
+      },
+      {
+        "pass": "isolated fft 0/8/0",
+        "values": 786432,
+        "maxAbsolute": 7.450580596923828e-9,
+        "failures": 0,
+        "worst": {
+          "i": 601983,
+          "actual": 0.04316195100545883,
+          "expected": 0.04316195845603943
+        }
+      },
+      {
+        "pass": "fft 0/8/0",
+        "values": 786432,
+        "maxAbsolute": 9.98377799987793e-7,
+        "failures": 0,
+        "worst": {
+          "i": 407611,
+          "actual": 0.008309567347168922,
+          "expected": 0.00831056572496891
+        }
+      },
+      {
+        "pass": "isolated fft 0/8/1",
+        "values": 786432,
+        "maxAbsolute": 9.313225746154785e-10,
+        "failures": 0,
+        "worst": {
+          "i": 692257,
+          "actual": -0.009943531826138496,
+          "expected": -0.009943532757461071
+        }
+      },
+      {
+        "pass": "fft 0/8/1",
+        "values": 786432,
+        "maxAbsolute": 1.0011717677116394e-8,
+        "failures": 0,
+        "worst": {
+          "i": 393832,
+          "actual": -0.0022376393899321556,
+          "expected": -0.0022376494016498327
+        }
+      },
+      {
+        "pass": "isolated fft 0/16/0",
+        "values": 786432,
+        "maxAbsolute": 7.450580596923828e-9,
+        "failures": 0,
+        "worst": {
+          "i": 21162,
+          "actual": -0.03211749345064163,
+          "expected": -0.03211750090122223
+        }
+      },
+      {
+        "pass": "fft 0/16/0",
+        "values": 786432,
+        "maxAbsolute": 0.000001287553459405899,
+        "failures": 0,
+        "worst": {
+          "i": 38970,
+          "actual": 0.005823886953294277,
+          "expected": 0.005825174506753683
+        }
+      },
+      {
+        "pass": "isolated fft 0/16/1",
+        "values": 786432,
+        "maxAbsolute": 1.862645149230957e-9,
+        "failures": 0,
+        "worst": {
+          "i": 597025,
+          "actual": -0.009437086060643196,
+          "expected": -0.009437087923288345
+        }
+      },
+      {
+        "pass": "fft 0/16/1",
+        "values": 786432,
+        "maxAbsolute": 1.0477378964424133e-8,
+        "failures": 0,
+        "worst": {
+          "i": 22108,
+          "actual": 0.0003189058043062687,
+          "expected": 0.0003189162816852331
+        }
+      },
+      {
+        "pass": "isolated fft 0/32/0",
+        "values": 786432,
+        "maxAbsolute": 1.4901161193847656e-8,
+        "failures": 0,
+        "worst": {
+          "i": 15242,
+          "actual": -0.14012107253074646,
+          "expected": -0.14012105762958527
+        }
+      },
+      {
+        "pass": "fft 0/32/0",
+        "values": 786432,
+        "maxAbsolute": 0.0000018551945686340332,
+        "failures": 0,
+        "worst": {
+          "i": 398706,
+          "actual": 0.07072857767343521,
+          "expected": 0.07072672247886658
+        }
+      },
+      {
+        "pass": "isolated fft 0/32/1",
+        "values": 786432,
+        "maxAbsolute": 1.862645149230957e-9,
+        "failures": 0,
+        "worst": {
+          "i": 397340,
+          "actual": 0.0206100232899189,
+          "expected": 0.02061002515256405
+        }
+      },
+      {
+        "pass": "fft 0/32/1",
+        "values": 786432,
+        "maxAbsolute": 1.1990778148174286e-8,
+        "failures": 0,
+        "worst": {
+          "i": 46684,
+          "actual": 0.00026701163733378053,
+          "expected": 0.00026699964655563235
+        }
+      },
+      {
+        "pass": "isolated fft 0/64/0",
+        "values": 786432,
+        "maxAbsolute": 1.4901161193847656e-8,
+        "failures": 0,
+        "worst": {
+          "i": 4546,
+          "actual": -0.08572296798229218,
+          "expected": -0.08572298288345337
+        }
+      },
+      {
+        "pass": "fft 0/64/0",
+        "values": 786432,
+        "maxAbsolute": 0.0000030086375772953033,
+        "failures": 0,
+        "worst": {
+          "i": 583114,
+          "actual": 0.0052242279052734375,
+          "expected": 0.005227236542850733
+        }
+      },
+      {
+        "pass": "isolated fft 0/64/1",
+        "values": 786432,
+        "maxAbsolute": 3.725290298461914e-9,
+        "failures": 0,
+        "worst": {
+          "i": 4568,
+          "actual": 0.016558412462472916,
+          "expected": 0.016558408737182617
+        }
+      },
+      {
+        "pass": "fft 0/64/1",
+        "values": 786432,
+        "maxAbsolute": 1.8801074475049973e-8,
+        "failures": 0,
+        "worst": {
+          "i": 583112,
+          "actual": -0.00025709014153108,
+          "expected": -0.00025710894260555506
+        }
+      },
+      {
+        "pass": "isolated fft 0/128/0",
+        "values": 786432,
+        "maxAbsolute": 2.9802322387695312e-8,
+        "failures": 0,
+        "worst": {
+          "i": 204749,
+          "actual": 0.19311416149139404,
+          "expected": 0.19311419129371643
+        }
+      },
+      {
+        "pass": "fft 0/128/0",
+        "values": 786432,
+        "maxAbsolute": 0.000004250556230545044,
+        "failures": 0,
+        "worst": {
+          "i": 300090,
+          "actual": 0.05285826325416565,
+          "expected": 0.052862513810396194
+        }
+      },
+      {
+        "pass": "isolated fft 0/128/1",
+        "values": 786432,
+        "maxAbsolute": 3.725290298461914e-9,
+        "failures": 0,
+        "worst": {
+          "i": 330244,
+          "actual": -0.02158263325691223,
+          "expected": -0.02158263698220253
+        }
+      },
+      {
+        "pass": "fft 0/128/1",
+        "values": 786432,
+        "maxAbsolute": 3.3527612686157227e-8,
+        "failures": 0,
+        "worst": {
+          "i": 598921,
+          "actual": -0.0007465139497071505,
+          "expected": -0.0007465474773198366
+        }
+      },
+      {
+        "pass": "isolated fft 0/256/0",
+        "values": 786432,
+        "maxAbsolute": 2.9802322387695312e-8,
+        "failures": 0,
+        "worst": {
+          "i": 11390,
+          "actual": 0.21127864718437195,
+          "expected": 0.21127861738204956
+        }
+      },
+      {
+        "pass": "fft 0/256/0",
+        "values": 786432,
+        "maxAbsolute": 0.000005833804607391357,
+        "failures": 0,
+        "worst": {
+          "i": 712698,
+          "actual": -0.041276827454566956,
+          "expected": -0.04128266125917435
+        }
+      },
+      {
+        "pass": "isolated fft 0/256/1",
+        "values": 786432,
+        "maxAbsolute": 3.725290298461914e-9,
+        "failures": 0,
+        "worst": {
+          "i": 5080,
+          "actual": 0.03171724081039429,
+          "expected": 0.03171723708510399
+        }
+      },
+      {
+        "pass": "fft 0/256/1",
+        "values": 786432,
+        "maxAbsolute": 4.493631422519684e-8,
+        "failures": 0,
+        "worst": {
+          "i": 783124,
+          "actual": 0.000961033976636827,
+          "expected": 0.0009610789129510522
+        }
+      },
+      {
+        "pass": "compose 0/0",
+        "values": 262144,
+        "maxAbsolute": 3.4458935260772705e-8,
+        "failures": 0,
+        "worst": {
+          "i": 86489,
+          "actual": -0.007876427844166756,
+          "expected": -0.007876462303102016
+        }
+      },
+      {
+        "pass": "compose 0/1",
+        "values": 262144,
+        "maxAbsolute": 6.612390279769897e-8,
+        "failures": 0,
+        "worst": {
+          "i": 80837,
+          "actual": -0.0025632623583078384,
+          "expected": -0.0025631962344050407
+        }
+      },
+      {
+        "pass": "compose 1/0",
+        "values": 262144,
+        "maxAbsolute": 5.587935447692871e-8,
+        "failures": 0,
+        "worst": {
+          "i": 12025,
+          "actual": -0.006061243824660778,
+          "expected": -0.006061187945306301
+        }
+      },
+      {
+        "pass": "compose 1/1",
+        "values": 262144,
+        "maxAbsolute": 2.7567148208618164e-7,
+        "failures": 0,
+        "worst": {
+          "i": 177421,
+          "actual": 0.07501756399869919,
+          "expected": 0.0750172883272171
+        }
+      },
+      {
+        "pass": "compose 2/0",
+        "values": 262144,
+        "maxAbsolute": 1.9231811165809631e-7,
+        "failures": 0,
+        "worst": {
+          "i": 241613,
+          "actual": 0.003435173537582159,
+          "expected": 0.003434981219470501
+        }
+      },
+      {
+        "pass": "compose 2/1",
+        "values": 262144,
+        "maxAbsolute": 0.000005833804607391357,
+        "failures": 0,
+        "worst": {
+          "i": 237561,
+          "actual": -0.041276827454566956,
+          "expected": -0.04128266125917435
+        }
+      },
+      {
+        "pass": "KP substep 1",
+        "values": 24576,
+        "maxAbsolute": 1.4901161193847656e-8,
+        "failures": 0,
+        "worst": {
+          "i": 1390,
+          "actual": 0.06762224435806274,
+          "expected": 0.06762225925922394
+        }
+      },
+      {
+        "pass": "KP substep 6",
+        "values": 24576,
+        "maxAbsolute": 2.2351741790771484e-8,
+        "failures": 0,
+        "worst": {
+          "i": 170,
+          "actual": 0.08770839869976044,
+          "expected": 0.08770837634801865
+        }
+      },
+      {
+        "pass": "KP substep 36",
+        "values": 24576,
+        "maxAbsolute": 4.470348358154297e-8,
+        "failures": 0,
+        "worst": {
+          "i": 74,
+          "actual": 0.09554679691791534,
+          "expected": 0.09554684162139893
+        }
+      }
+    ],
+    "swash-parity": [
+      {
+        "pass": "originalBedInit",
+        "output": 0,
+        "values": 24576,
+        "maxAbsolute": 0.000003341585397720337,
+        "failures": 0,
+        "worst": {
+          "i": 13450,
+          "actual": -0.04041077941656113,
+          "expected": -0.040407437831163406
+        }
+      },
+      {
+        "pass": "originalStateInit",
+        "output": 0,
+        "values": 24576,
+        "maxAbsolute": 0,
+        "failures": 0,
+        "worst": null
+      },
+      {
+        "pass": "originalSources",
+        "output": 0,
+        "values": 24576,
+        "maxAbsolute": 2.2351741790771484e-8,
+        "failures": 0,
+        "worst": {
+          "i": 2026,
+          "actual": 0.12055807560682297,
+          "expected": 0.12055809795856476
+        }
+      },
+      {
+        "pass": "originalFoam",
+        "output": 0,
+        "values": 24576,
+        "maxAbsolute": 2.2724270820617676e-7,
+        "failures": 0,
+        "worst": {
+          "i": 2264,
+          "actual": 0.03823003172874451,
+          "expected": 0.03823025897145271
+        }
+      },
+      {
+        "pass": "originalFoam",
+        "output": 1,
+        "values": 24576,
+        "maxAbsolute": 9.313225746154785e-10,
+        "failures": 0,
+        "worst": {
+          "i": 1108,
+          "actual": 0.004806987475603819,
+          "expected": 0.0048069884069263935
+        }
+      },
+      {
+        "pass": "originalFoamView",
+        "output": 0,
+        "values": 24576,
+        "maxAbsolute": 0,
+        "failures": 0,
+        "worst": null
+      },
+      {
+        "pass": "originalWet",
+        "output": 0,
+        "values": 24576,
+        "maxAbsolute": 1.1920928955078125e-7,
+        "failures": 0,
+        "worst": {
+          "i": 16568,
+          "actual": 0.9072872996330261,
+          "expected": 0.9072874188423157
+        }
+      },
+      {
+        "pass": "originalWetInit",
+        "output": 0,
+        "values": 24576,
+        "maxAbsolute": 0.000003824010491371155,
+        "failures": 0,
+        "worst": {
+          "i": 19082,
+          "actual": 0.011222201399505138,
+          "expected": 0.01122602540999651
+        }
+      },
+      {
+        "pass": "originalHeight",
+        "output": 0,
+        "values": 24576,
+        "maxAbsolute": 2.60770320892334e-8,
+        "failures": 0,
+        "worst": {
+          "i": 3808,
+          "actual": -0.05249207094311714,
+          "expected": -0.05249209702014923
+        }
+      },
+      {
+        "pass": "originalView",
+        "output": 0,
+        "values": 24576,
+        "maxAbsolute": 0.000003824010491371155,
+        "failures": 0,
+        "worst": {
+          "i": 19083,
+          "actual": 0.011223822832107544,
+          "expected": 0.011227646842598915
+        }
+      },
+      {
+        "pass": "originalShift",
+        "output": 0,
+        "values": 24576,
+        "maxAbsolute": 6.402842700481415e-10,
+        "failures": 0,
+        "worst": {
+          "i": 10364,
+          "actual": 0.0007345702033489943,
+          "expected": 0.0007345695630647242
+        }
+      },
+      {
+        "pass": "originalShiftFoam",
+        "output": 0,
+        "values": 24576,
+        "maxAbsolute": 0,
+        "failures": 0,
+        "worst": null
+      },
+      {
+        "pass": "originalShiftFoam",
+        "output": 1,
+        "values": 24576,
+        "maxAbsolute": 0,
+        "failures": 0,
+        "worst": null
+      },
+      {
+        "pass": "originalFarParam",
+        "output": 0,
+        "values": 4608,
+        "maxAbsolute": 0.00003838539123535156,
+        "failures": 0,
+        "worst": {
+          "i": 2309,
+          "actual": 2.54715633392334,
+          "expected": 2.5471179485321045
+        }
+      },
+      {
+        "pass": "originalFarModel",
+        "output": 0,
+        "values": 24576,
+        "maxAbsolute": 0.000003874301910400391,
+        "failures": 0,
+        "worst": {
+          "i": 15500,
+          "actual": 0.7583637237548828,
+          "expected": 0.7583598494529724
+        }
+      },
+      {
+        "pass": "originalFarModel",
+        "output": 1,
+        "values": 24576,
+        "maxAbsolute": 0.00004661083221435547,
+        "failures": 0,
+        "worst": {
+          "i": 10321,
+          "actual": 1.407799243927002,
+          "expected": 1.4078458547592163
+        }
+      },
+      {
+        "pass": "originalFarModel",
+        "output": 2,
+        "values": 24576,
+        "maxAbsolute": 2.384185791015625e-7,
+        "failures": 0,
+        "worst": {
+          "i": 222,
+          "actual": -0.0285569429397583,
+          "expected": -0.0285567045211792
+        }
+      }
+    ]
+  }
+}
